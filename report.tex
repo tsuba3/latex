@@ -1,0 +1,74 @@
+\documentclass[a4paper]{ltjsarticle}
+
+\usepackage{geometry} % 余白等の設定
+\usepackage{lastpage} % 最後のページ番号を \pageref{LastPage} で取得
+\usepackage{fancyhdr} % ヘッダー
+
+\usepackage{amsfonts} % 整数全体の集合とかの記号を表すフォント
+\usepackage{bm}       % 数式でベクトルを表す太字斜体
+\usepackage{braket}   % Dirac の Braket 記法
+
+\usepackage{mhchem}   % 化学式
+\usepackage{chemfig}  % 構造式
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% LaTeX 入門レポート
+% 0月0日（null）〆
+% n 字程度
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+
+% maketitle
+\newcommand{\repotitle}[1]{\def\@repotitle{#1}}
+\newcommand{\gakuseinumber}[1]{\def\@gakuseinumber{#1}}
+\renewcommand{\maketitle}{
+    % \thispagestyle{empty}
+    % \pagenumbering{gobble}
+    % \vspace*{\stretch{1}}
+    \begin{center}
+        \vspace*{1cm}
+        {\Huge{\@title}}
+        \vspace{1cm}
+
+        {\Large \@date}
+
+        \vspace{0.5cm}
+
+        {\Large \@gakuseinumber \hspace{0.5em} \@author}
+
+        \vspace{1cm}
+    \end{center}
+    % \newpage
+    % \pagenumbering{arabic}
+}
+
+% Header
+\pagestyle{fancy}
+\lhead{\@repotitle \hspace{2em} \@gakuseinumber \hspace{0.5em} \@author}
+\rhead{Page \thepage\ of \pageref{LastPage}}
+\fancyfoot{}
+\makeatother
+
+\begin{document}
+
+%%%% Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\repotitle{「LaTeX 入門」レポート}
+\title{タイトル}
+\author{東大 太郎}
+\gakuseinumber{J0-000000}
+\date{\today}
+\maketitle
+% \newgeometry{left=15mm, right=15mm, top=15mm, bottom=15mm}
+% \fancyfootoffset{0pt} Recaluculate \headwidth
+
+%%%% Content %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{見出し}
+
+本文
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
