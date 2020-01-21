@@ -1,6 +1,7 @@
 \documentclass[a4paper]{ltjsarticle}
 
-\usepackage{geometry} % 余白等の設定
+\usepackage{comment}
+\usepackage[bottom=25mm]{geometry} % 余白等の設定
 \usepackage{lastpage} % 最後のページ番号を \pageref{LastPage} で取得
 \usepackage{fancyhdr} % ヘッダー
 
@@ -8,7 +9,7 @@
 \usepackage{bm}       % 数式でベクトルを表す太字斜体
 \usepackage{braket}   % Dirac の Braket 記法
 
-\usepackage{mhchem}   % 化学式
+\usepackage[version=4]{mhchem}   % 化学式
 \usepackage{chemfig}  % 構造式
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -25,11 +26,12 @@
 \newcommand{\repotitle}[1]{\def\@repotitle{#1}}
 \newcommand{\gakuseinumber}[1]{\def\@gakuseinumber{#1}}
 \renewcommand{\maketitle}{
+    % 表紙にするときはコメントアウト
     % \thispagestyle{empty}
     % \pagenumbering{gobble}
     % \vspace*{\stretch{1}}
     \begin{center}
-        \vspace*{1cm}
+        \vspace*{0.4cm}
         {\Huge{\@title}}
         \vspace{1cm}
 
@@ -50,6 +52,7 @@
 \lhead{\@repotitle \qquad \@gakuseinumber \quad \@author}
 \rhead{Page \thepage\ of \pageref{LastPage}}
 \fancyfoot{}
+\fancypagestyle{nofooter}
 \makeatother
 
 \begin{document}
