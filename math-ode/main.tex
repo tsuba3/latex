@@ -1,0 +1,112 @@
+\documentclass[a4paper]{ltjsarticle}
+
+\usepackage{amsfonts} % 整数全体の集合とかの記号を表すフォント
+\usepackage{bm}       % 数式でベクトルを表す太字斜体
+\usepackage{braket}   % Dirac の Braket 記法
+
+\usepackage{mhchem}   % 化学式
+\usepackage{chemfig}  % 構造式
+
+\newcommand{\C}{\mathrm{C}\,}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 数式の書き方など備忘録
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%%%% Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{数学1E ノート}
+\author{Tsubasa}
+\date{\today}
+\maketitle
+%%%% Content %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{常微分方程式 Ordinary Differential Equation}
+
+\subsection{定数分離 \quad $ f(y)dy = g(x)dx $}
+
+$$ \int f(y) \,\mathrm{d}y = \int g(x) \,\mathrm{d}x + \C $$
+
+例題
+$$ y'=x^2e^{2y} $$
+$$ y = -\frac{1}{2} \log\left(-\frac{2}{3} x^2 + \C \right) $$
+
+
+\subsection{定数変化法 \quad $ \mathrm{定数分離できる形} = p(x) $}
+
+まず $ \mathrm{左辺} = 0 $ の解を $ f(x) $ として、
+積分定数 $\C$ を $C(x)$ として、代入し特殊解を求める。
+$$ y = C (\mathrm{同次式の解}) + \mathrm{特殊解} $$
+
+例題
+$$ xy' + y = x $$
+$$ y = \frac{1}{2}x + \C x^{-1} $$
+
+
+\subsection{同次線形 $ y'' + ay' + by  = 0 $}
+
+$ y = \exp(\lambda x) $ を代入して特性方程式 $ \lambda ^2 + a \lambda + b = 0$ を解く
+
+$$ y = \begin{cases}
+    \mathrm{C}_1 \exp(\lambda_1 x) + \mathrm{C}_2 \exp(\lambda_2 x) \\
+    \mathrm{C}_1 \exp(\lambda_0 x) + \mathrm{C}_2 \, x \exp(\lambda_0 x) & (特性方程式が重解の時)
+\end{cases} $$
+
+例題
+$$ y''' - 5y'' + 6y' = 0 $$
+$$ y = \mathrm{C}_1 + \mathrm{C}_2 \exp(2x) + \mathrm{C}_3 \exp(3x) $$
+
+
+\subsection{線形非同次 \quad $ y'' + ay' + by = f(x) $}
+
+$ (左辺) = 0 $ の解を $ y_1, y_2 $ と求める。特殊解を定数変化法か未定係数法
+（ $ y = ax + b $ や $ y = e^{kx} $ などと置いてみる）で特殊解 $y_0$ を求める。
+$$ y = \mathrm{C}_1 \, y_1 + \mathrm{C}_2 \, y_2 + y_0 $$
+
+例題
+$$ y'' + 3y' + 2y = xe^x $$
+$$ y = \mathrm{C}_1 \, e^{-x} + \mathrm{C}_2 \, e^{-2x} + \left( \frac{1}{6}x - \frac{5}{36} \right) e^2 $$
+
+
+
+\subsection{1階連立 ODE}
+$$ \begin{cases}
+    y_1' = ay_1 + by_2 \\
+    y_2' = cy_1 + dy_2
+\end{cases} $$
+
+$ \mathbf{y} = {^t}[y_1, y_2] $ とすると
+$$ \mathbf{y}' = \begin{bmatrix} a & b \\ c & d \\ \end{bmatrix} \mathbf{y} $$
+
+対角化して
+
+$$ \mathbf{y} = \mathrm{C}_1 \, \mathbf{v}_1 \exp(\lambda_1 x) + \mathrm{C}_2 \, \mathbf{v}_2 \exp(\lambda_2 x) $$
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ベクトル解析}
+
+省略
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{変分法}
+
+汎関数 $ I[f] = \int F(x, f', f) dx $ の最小値を極小値を求める。
+
+オイラーラグランジュ方程式から求められる。
+$$ \frac{\partial}{\partial f} - \frac{d}{dx}\frac{\partial F}{\partial f'} = 0 $$
+
+$x$ が現れない $ F(f', f) $ のときは
+$$ F - f' \frac{\partial F}{\partial f'} = \mathrm{const} $$
+
+\subsection{ラグランジュの未定乗数法}
+
+minimize $ f(x, y) $ subject to $ g(x, y) = 0 $
+
+$$ F(x,  y, \lambda) = f(x, y) + \lambda g(x, y) $$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
