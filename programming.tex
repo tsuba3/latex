@@ -1,0 +1,109 @@
+\documentclass[a4paper]{ltjsarticle}
+
+\usepackage{amsfonts} % 整数全体の集合とかの記号を表すフォント
+\usepackage{bm}       % 数式でベクトルを表す太字斜体
+\usepackage{braket}   % Dirac の Braket 記法
+
+\usepackage{listings} % ソースコード
+\usepackage{color}
+\usepackage{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% コード片
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{comment}
+\lstset{ % モノクロ用
+    basicstyle={\ttfamily},
+    identifierstyle={},
+    commentstyle={\small},
+    keywordstyle={\bfseries},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0\zw,
+    xleftmargin=3\zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1\zw,
+    lineskip=-0.5ex
+}
+\end{comment}
+
+\lstset{
+    basicstyle={\ttfamily},
+    identifierstyle={},
+    commentstyle={\color[rgb]{0,0.5,0}},
+    keywordstyle={\bfseries \color[rgb]{0,0,1}},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily \color[rgb]{1, 0.4, 0}},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0\zw,
+    xleftmargin=3\zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1\zw,
+    lineskip=-0.5ex
+}
+
+
+\begin{document}
+%%%% Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{コード片}
+\author{Tsubasa}
+\date{\today}
+\maketitle
+%%%% Content %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\LaTeX でのコードの書き方}
+
+% \lstinputlisting{test.c} ファイルを読み込む場合
+
+{
+\lstset{
+    basicstyle={\ttfamily},
+    identifierstyle={},
+    commentstyle={\small},
+    keywordstyle={\bfseries},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0\zw,
+    xleftmargin=3\zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1\zw,
+    lineskip=-0.5ex
+}
+\begin{lstlisting}[caption=モノクロ, language=c]
+#include <iostream>
+int main() {
+    // Comment ハローワールド
+    std::out << "Hello World!\n";
+    return 0;
+}
+\end{lstlisting}
+}
+
+\begin{lstlisting}[caption=カラー, language=c]
+#include <iostream>
+int main() {
+    // Comment ハローワールド
+    std::out << "Hello World!\n";
+    return 0;
+}
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
