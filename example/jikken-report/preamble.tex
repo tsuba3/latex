@@ -1,13 +1,3 @@
-\documentclass[a4paper]{ltjsarticle}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% LaTeX 入門レポート
-% 0月0日（null）〆
-% n 字程度
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \usepackage{color}
 \usepackage{comment}
 \usepackage[bottom=25mm]{geometry} % 余白等の設定
@@ -24,18 +14,21 @@
 \usepackage[version=4]{mhchem}   % 化学式
 \usepackage{chemfig}  % 構造式
 \usepackage{siunitx}  % SI unit
-\usepackage{listings}  % コード
+\usepackage{listing}  % コード
 
 \makeatletter
 
 % maketitle
+\@addtoreset{section}{part}
+\titleformat{\part}{\centering\Large}{}{0em}{}
+\titlespacing{\part}{0pt}{0ex}{1cm}
 \newcommand{\repotitle}[1]{\def\@repotitle{#1}}
 \newcommand{\gakuseinumber}[1]{\def\@gakuseinumber{#1}}
 \renewcommand{\maketitle}{
     % 表紙にするときはコメントアウト
-    % \thispagestyle{empty}
-    % \pagenumbering{gobble}
-    % \vspace*{\stretch{1}}
+    \thispagestyle{empty}
+    \pagenumbering{gobble}
+    \vspace*{\stretch{1}}
     \begin{center}
         \vspace*{0.4cm}
         {\Huge{\@title}}
@@ -49,10 +42,11 @@
 
         \vspace{1cm}
     \end{center}
-    % \vspace{\stretch{1}}
-    % \newpage
-    % \pagenumbering{arabic}
+    \vspace{\stretch{1}}
+    \newpage
+    \pagenumbering{arabic}
 }
+
 
 % Header
 \pagestyle{fancy}
@@ -62,23 +56,17 @@
 \fancypagestyle{nofooter}
 \makeatother
 
+% Macros
+\newcommand{\uL}[0]{\si{\micro L}}
+\newcommand{\ug}[0]{\si{\micro g}}
+
 %%%% Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\repotitle{「LaTeX 入門」レポート}
-\title{タイトル}
-\author{東大 太郎}
-\gakuseinumber{J0-000000}
+\repotitle{分析化学実験 5 レポート}
+\title{分析化学実験 5 レポート \\ \vspace{1.5ex} {\LARGE --- 生化学分析 ---}}
+\author{宗形　翼}
+\gakuseinumber{03-200796}
 \date{\today}
-
-\begin{document}
-\maketitle
-% \newgeometry{left=15mm, right=15mm, top=15mm, bottom=15mm}
-% \fancyfootoffset{0pt} Recaluculate \headwidth
-
-%%%% Content %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{見出し}
-
-本文
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\end{document}
+\hypersetup{
+    pdftitle={分析化学実験 5 レポート},
+    pdfauthor={宗形　翼}
+}

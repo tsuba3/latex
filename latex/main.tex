@@ -1,0 +1,34 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% LaTeX 備忘録
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper]{ltjsarticle}
+
+\usepackage{amsfonts} % 整数全体の集合とかの記号を表すフォント
+\usepackage{bm}       % 数式でベクトルを表す太字斜体
+\usepackage{braket}   % Dirac の Braket 記法
+\usepackage{chemfig}  % 構造式
+\usepackage{comment}  % コメント
+\usepackage{mhchem}   % 化学式
+\usepackage{listing}  % プログラム
+
+\include{macros.tex}
+
+\begin{document}
+%%%% Title %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\LaTeX 備忘録}
+\author{Tsubasa}
+\date{\today}
+\maketitle
+%%%% Content %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{数式}
+
+\begin{texexample}
+$$ \Braket{\bar{p}} = \Braket{\phi | -i \hbar \frac{\partial}{\partial x} | \psi } $$
+\end{texexample}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
