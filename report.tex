@@ -17,6 +17,7 @@
 \usepackage[unicode]{hyperref} % PDF のメタデータ生成
 \usepackage{docmute}
 
+\usepackage{amsmath}  % 数式環境
 \usepackage{amsfonts} % 整数全体の集合とかの記号を表すフォント
 \usepackage{bm}       % 数式でベクトルを表す太字斜体
 \usepackage{braket}   % Dirac の Braket 記法
@@ -25,6 +26,7 @@
 \usepackage{chemfig}  % 構造式
 \usepackage{siunitx}  % SI unit
 \usepackage{listings}  % コード
+\usepackage{here}     % 図表をその場に表示
 
 \makeatletter
 
@@ -68,7 +70,11 @@
 \author{東大 太郎}
 \gakuseinumber{J0-000000}
 \date{\today}
-
+\hypersetup{
+    pdftitle={},
+    pdfauthor={},
+    hidelinks=true
+}
 \begin{document}
 \maketitle
 % \newgeometry{left=15mm, right=15mm, top=15mm, bottom=15mm}
