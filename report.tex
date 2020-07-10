@@ -16,8 +16,13 @@
 \usepackage{titlesec} % Section などの設定
 \usepackage[unicode]{hyperref} % PDF のメタデータ生成
 \usepackage{docmute}
+\usepackage{here}     % 図表をその場に表示
+\usepackage[skip=2pt]{caption} % 図とキャプションの余白を調整
 
 \usepackage{amsmath}  % 数式環境
+\addtolength{\jot}{1em} % 数式の行間を調整
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs=true} % ref した数式のみ番号を表示
 \usepackage{amsfonts} % 整数全体の集合とかの記号を表すフォント
 \usepackage{bm}       % 数式でベクトルを表す太字斜体
 \usepackage{braket}   % Dirac の Braket 記法
@@ -26,7 +31,6 @@
 \usepackage{chemfig}  % 構造式
 \usepackage{siunitx}  % SI unit
 \usepackage{listings}  % コード
-\usepackage{here}     % 図表をその場に表示
 
 \makeatletter
 
