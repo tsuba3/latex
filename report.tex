@@ -39,8 +39,7 @@
 \newcommand{\gakuseinumber}[1]{\def\@gakuseinumber{#1}}
 \renewcommand{\maketitle}{
     % 表紙にするときはコメントアウト
-    % \thispagestyle{empty}
-    % \pagenumbering{gobble}
+    % \begin{titlepage}
     % \vspace*{\stretch{1}}
     \begin{center}
         \vspace*{0.4cm}
@@ -53,11 +52,10 @@
 
         {\Large \@gakuseinumber \quad \@author}
 
-        \vspace{1cm}
+        \vspace{2cm}
     \end{center}
     % \vspace{\stretch{1}}
-    % \newpage
-    % \pagenumbering{arabic}
+    % \end{titlepage}
 }
 
 % Header
