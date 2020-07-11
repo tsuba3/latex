@@ -10,6 +10,7 @@
 
 \usepackage{color}
 \usepackage{comment}
+\usepackage{ifthen}
 \usepackage[bottom=25mm]{geometry} % 余白等の設定
 \usepackage{lastpage} % 最後のページ番号を \pageref{LastPage} で取得
 \usepackage{fancyhdr} % ヘッダー
@@ -36,6 +37,7 @@
 
 % maketitle
 \newcommand{\repotitle}[1]{\def\@repotitle{#1}}
+\newcommand{\syozoku}[1]{\def\@syozoku{#1}}
 \newcommand{\gakuseinumber}[1]{\def\@gakuseinumber{#1}}
 \renewcommand{\maketitle}{
     % 表紙にするときはコメントアウト
@@ -50,6 +52,9 @@
 
         \vspace{0.5cm}
 
+        \ifthenelse{\isundefined{\@syozoku}}{}{
+            \Large \@syozoku \quad
+        }
         {\Large \@gakuseinumber \quad \@author}
 
         \vspace{2cm}
@@ -70,6 +75,7 @@
 \repotitle{「LaTeX 入門」レポート}
 \title{タイトル}
 \author{東大 太郎}
+% \syozoku{}
 \gakuseinumber{J0-000000}
 \date{\today}
 \hypersetup{
