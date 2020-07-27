@@ -1,0 +1,22 @@
+\documentclass[b5paper,10pt]{jarticle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 均等割り付け
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{kintou}
+
+\begin{document}
+
+\begin{tabular}{ll}
+\makebox[5zw][s]{\textleftarrow\ 5字 \textrightarrow} & \makebox[2cm][s]{\textleftarrow\ 2cm \textrightarrow}\\
+\kintou{5}{寿限無寿限無五劫の擦り切れ} & \kintouwidth{2cm}{寿限無寿限無五劫の擦り切れ}\\
+\kintou{5}{寿限無寿限無五劫} & \kintouwidth{2cm}{寿限無寿限無五劫}\\
+\kintou{5}{寿限無寿限} & \kintouwidth{2cm}{寿限無寿限}\\
+\kintou{5}{寿限無} & \kintouwidth{2cm}{寿限無}\\
+\kintou{5}{寿限} & \kintouwidth{2cm}{寿限}\\
+\end{tabular}
+
+\end{document}
