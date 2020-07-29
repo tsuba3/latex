@@ -1,0 +1,349 @@
+\documentclass[b5paper,10pt]{ltjsarticle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% TECKTECK 企画カード（仮）
+% 作成者：　宗形　翼 (45 期)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{bxjalipsum} % 吾輩は猫である (Lorem ipsum)
+\usepackage{calc}
+\usepackage[skip=2pt]{caption} % 図とキャプションの余白を調整
+\usepackage{comment}
+\usepackage{docmute}
+\usepackage{fancyhdr} % ヘッダー
+\usepackage[top=15mm,bottom=15mm,left=15mm,right=15mm]{geometry} % 余白等の設定
+\usepackage{here}     % 図表をその場に表示
+\usepackage[unicode]{hyperref} % PDF のメタデータ生成
+\usepackage{ifthen}
+\usepackage{multicol}
+\usepackage{tabularx}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{titlesec} % Section などの設定
+
+\makeatletter
+
+\newlength{\wtarget}
+\newlength{\wactual}
+\newcommand{\kintou}[2]{\kintouwidth{#1\zw}{#2}}
+\newcommand{\kintouwidth}[2]{%
+    \setlength{\wtarget}{#1}%
+    \settowidth{\wactual}{#2}%
+    \ifthenelse{\lengthtest{\wtarget < \wactual}}{%
+        \setlength{\wtarget}{1pt * \real{\strip@pt\wtarget} / \real{\strip@pt\wactual}}%
+        \scalebox{\strip@pt\wtarget}[1]{#2}%
+    }{%
+        \makebox[\wtarget][s]{#2}%
+    }%
+}
+
+\newcommand{\placeholder}[3]{%
+    \fbox{%
+        \begin{minipage}[c][#2-2\fboxsep-2\fboxrule][c]{#1-2\fboxsep-2\fboxrule}
+            \noindent\centering\Huge #3
+        \end{minipage}
+    }
+}
+\renewenvironment{abstract}{\par\leftskip=3\zw\rightskip=\leftskip\small}{\par}
+\titleformat{\section}{\large\headfont\bfseries}{}{0pt}{}
+\titleformat{\subsection}{\headfont\bfseries}{}{0pt}{}
+
+\makeatother
+
+\begin{document}
+%  _____ _ _   _
+% |_   _(_) |_| | ___
+%   | | | | __| |/ _ \
+%   | | | | |_| |  __/
+%   |_| |_|\__|_|\___|
+%
+{\medskip\noindent
+\makebox[0pt][l]{TECKTECK}%
+\makebox[\textwidth][c]{山行企画カード 2020}%
+\makebox[0pt][r]{第 1 版}}
+
+\begin{tcolorbox}[colback=white]
+    \centering\Huge{富士山}
+\end{tcolorbox}
+
+{\noindent
+\makebox[\textwidth][l]{%
+期日：\quad m 月 n 日\qquad
+予備日：\quad m 月 n + 3 日
+}\makebox[0pt][r]{\fbox{1泊2日} \fbox{朝発}}}
+
+%     _         _   _
+%    / \  _   _| |_| |__   ___  _ __
+%   / _ \| | | | __| '_ \ / _ \| '__|
+%  / ___ \ |_| | |_| | | | (_) | |
+% /_/   \_\__,_|\__|_| |_|\___/|_|
+%
+{\noindent 企責：
+\begin{table}[H]
+\centering
+\begin{tabular}{llllllll}
+    \quad\kintou{6}{五神　真} &(& \kintou{6}{東京大学} & 57\quad 期 &)& \quad TEL: & 080-987-654 & \quad Hardbank\quad \\\hline
+    \quad\kintou{6}{御茶ノ水　お茶子} &(& \kintou{6}{御茶の水女子大学} & 57\quad 期  &)& \quad TEL: & 090-123-456 & \quad dokomo\quad \\\hline
+\end{tabular}
+\end{table}}
+
+%     _    _         _                  _
+%    / \  | |__  ___| |_ _ __ __ _  ___| |_
+%   / _ \ | '_ \/ __| __| '__/ _` |/ __| __|
+%  / ___ \| |_) \__ \ |_| | | (_| | (__| |_
+% /_/   \_\_.__/|___/\__|_|  \__,_|\___|\__|
+%
+\begin{abstract}
+    日本一の高さを誇り世界遺産にも登録された富士山。
+    日本人である以上一度は登っておきたいですよね。
+    さらに今年は天皇陛下が登ったことで知られるプリンスルートを登ります。
+    プリンスルートは富士宮ルートと御殿場ルートのいいとこ取りをしたルートです。
+    登りは雄大な眺めを楽しめ、下りは大砂走りができます!
+    下山後には富士山の見える温泉で疲れを癒します。
+\end{abstract}
+
+\vspace{1cm}
+
+%     _        _   _               ____  _
+%    / \   ___| |_(_) ___  _ __   |  _ \| | __ _ _ __
+%   / _ \ / __| __| |/ _ \| '_ \  | |_) | |/ _` | '_ \
+%  / ___ \ (__| |_| | (_) | | | | |  __/| | (_| | | | |
+% /_/   \_\___|\__|_|\___/|_| |_| |_|   |_|\__,_|_| |_|
+%
+\section{行動予定}
+\usetikzlibrary{positioning}
+\begin{figure}[H]
+\newcommand{\figwidth}{\textwidth - 10mm}
+\newcommand{\lineheight}{1.5cm}
+\newcommand{\belowtime}[3]{
+    \node [below=3pt of #1.south west,anchor=north west,inner sep=0pt] {\scriptsize #2};
+    \node [below=3pt of #1.south east,anchor=north east,inner sep=0pt] {\scriptsize #3};
+}
+\newcommand{\belowtimex}[3]{
+    \node [below=3pt of #1.south west,anchor=north west,inner sep=0pt,xshift=-3pt] {\scriptsize #2};
+    \node [below=3pt of #1.south east,anchor=north east,inner sep=0pt,xshift=3pt] {\scriptsize #3};
+}
+\newcommand{\belowtimecenter}[2]{
+    \node [below=3pt of #1.south,anchor=north,inner sep=0pt] {\scriptsize #2};
+}
+\centering
+\begin{tikzpicture}[]
+    \node [draw, anchor=west] (a) {新宿駅};
+    \belowtime{a}{6:30}{7:02}
+    \node [draw] (b) [right=5.5cm of a] {新松田駅};
+    \belowtime{b}{8:32}{}
+    \node [draw] (c) [right=1cm of b] {松田駅};
+    \belowtime{c}{}{8:37}
+    \node at (\figwidth, 0) [] (d) [inner sep=0pt] {};
+    \node [draw] (e) [below=\lineheight of a.west,anchor=west] {御殿場駅};
+    \belowtime{e}{9:23}{9:30}
+    \node [draw] (f) [right=1.2cm of e] {富士宮口五合目};
+    \belowtime{f}{10:30}{11:00}
+    \node [draw] (g) [right=1.2cm of f] {宝永第一火口};
+    \belowtime{g}{11:45}{11:55}
+    \node [draw] (h) [right=2.2cm of g] {宝永山山頂};
+    \belowtime{h}{12:55}{13:30}
+    \node (i) [below=\lineheight of d.west,anchor=west,inner sep=0pt] {};
+    \node (jj) [below=\lineheight of e.west,inner sep=0pt] {};
+    \node [draw] (j) [right=2cm of jj] {走り六合};
+    \belowtime{j}{13:55}{14:05}
+    \node [draw] (k) [right=3.5cm of j] {\makebox[3\zw][s]{七合目}};
+    \belowtimex{k}{15:30}{15:40}
+    \node [draw] (l) [right=2.5cm of k] {赤岩八号館};
+    \belowtime{l}{15:40}{16:50}
+
+    \draw [double] (a) to node[above,align=left]{小田急小田原線（小田原行き）} (b);
+    \draw [-] (b) to node[above]{\footnotesize 4分} (c);
+    \draw [double] (c) to node[above]{JR 御殿場線} (d);
+    \draw [-] (e) to node[above]{\footnotesize 45分} (f);
+    \draw [-] (f) to node[above]{\footnotesize 25分} (g);
+    \draw [-] (g) to node[above]{\footnotesize 1時間15分} (h);
+    \draw [-] (h) to node[above]{} (i);
+    \draw [-] (jj) to node[above]{\footnotesize 25分} (j);
+    \draw [-] (j) to node[above]{\footnotesize 75分 + 休10分} (k);
+    \draw [-] (k) to node[above]{\footnotesize 1時間10分} (l);
+\end{tikzpicture}
+\end{figure}
+
+\begin{table}[H]
+\begin{tabular}{lll}
+    \kintou{5}{歩程} &:& 4 時間 35 分 \\
+    \kintou{5}{累積高低差} &:& UP: 1079 m / DOWN: 92 m \\
+    \kintou{5}{標高} &:& 3300 m　(赤岩八号館) \\
+\end{tabular}
+\end{table}
+
+\clearpage
+
+%  __  __
+% |  \/  | __ _ _ __  ___
+% | |\/| |/ _` | '_ \/ __|
+% | |  | | (_| | |_) \__ \
+% |_|  |_|\__,_| .__/|___/
+%              |_|
+\section{概念図}
+
+\begin{figure}[H]
+\begin{minipage}{0.48\textwidth}
+    \placeholder{\textwidth}{0.5\textwidth}{A}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+    \placeholder{\textwidth}{0.5\textwidth}{B}
+\end{minipage}
+
+\vspace{2ex}\centering\placeholder{0.9\textwidth}{\textwidth}{C}
+\end{figure}
+
+\clearpage
+
+%   ____          _
+%  / ___|___  ___| |_
+% | |   / _ \/ __| __|
+% | |__| (_) \__ \ |_
+%  \____\___/|___/\__|
+%
+\section{費用}
+
+\begin{table}[H]
+    \begin{tabularx}{\textwidth}{llrlX}
+        \kintou{3}{\textbf{回収金}} &:& 12,000 &円& 行きのタクシー代＋宿泊費＋保険料＋入湯料＊自炊費\\
+        \kintou{3}{合計} &:& 12,345 &円& 解散までの費用 \\
+        && 15,456 &円& 解散後、アフターに参加する \\
+        && 13,456 &円& 解散後、アフターに参加しない \\
+
+        \kintou{3}{交通費}&:&
+        2,300 &円& 解散までの費用 \\
+        && 2,800 &円& 解散後、アフターに参加する場合の新宿までの費用 \\
+        && 3,300 &円& 解散後、アフターに参加しない場合の新宿までの費用 \\
+        \kintou{3}{食費}&:& $\alpha$ &円& \\
+        \kintou{3}{施設費}&:& 9,000 &円& 宿泊費、入湯料 \\
+        \kintou{3}{その他}&:& 500 &円& 保険料 \\
+    \end{tabularx}
+\end{table}
+
+\section{費用詳細}
+
+\subsection{交通費}
+
+\begin{table}[H]
+    \begin{tabularx}{\textwidth}{lXl}
+        行き
+        & \textbullet 東京駅〜大阪駅 & 9,800 円 / 人 \\
+        & \textbullet 大阪駅〜富士山五合目（タクシー） & 2,800 円 / 人 \\
+        帰り
+        & \textbullet 東京駅〜大阪駅 & 9,800 円 / 人 \\
+        & \textbullet 大阪駅〜富士山五合目（タクシー） & 2,800 円 / 人 \\
+    \end{tabularx}
+\end{table}
+
+\subsection{施設費}
+
+\begin{table}[H]
+    \begin{tabularx}{0.5\textwidth}{Xl}
+        \textbullet 山小屋 & 3,800 円 / 人 \\
+        \textbullet 温泉 & 2,800 円 / 人 \\
+    \end{tabularx}
+\end{table}
+
+\section{保険の加入}
+
+全員一括で加入
+
+%  ____            _    _               _     _     _
+% |  _ \ __ _  ___| | _(_)_ __   __ _  | |   (_)___| |_
+% | |_) / _` |/ __| |/ / | '_ \ / _` | | |   | / __| __|
+% |  __/ (_| | (__|   <| | | | | (_| | | |___| \__ \ |_
+% |_|   \__,_|\___|_|\_\_|_| |_|\__, | |_____|_|___/\__|
+%                               |___/
+\section{持ち物}
+
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 回収金(12,000 円)
+        \item エスケープ用のお金(8,000 円 程度)
+        \item 保険証
+        \item 学生証
+        \item IC カード(4,000 円程度)
+        \item スマホ
+        \item スマホの充電バッテリー(ない場合充電器を持参すれば有料で借りられる)
+        \item 水(2L 程度)
+        \item 防寒着(フリースやユニクロのウルトラライトダウンなど)
+        \item 体温調節しやすい服
+        \item 登山用具
+        \begin{itemize}
+            \item ザック
+            \item 山靴
+            \item 替えの靴紐
+            \item ヘッドライト
+            \item 1/25000 地図(事前にコースを書いておく)
+            \item 本紙
+            \item マップケース(ジップロック などで可)
+        \end{itemize}
+        \item 雨具
+        \begin{itemize}
+            \item セパレ
+            \item ザックカバー
+            \item 1 日目の昼食
+            \item 行動食(お菓子)
+            \item 非常食(カロリーメイトなど)
+            \item コンパス
+            \item ティッシュ
+            \item 汗拭きシート
+            \item カイロ
+            \item 軍手
+            \item 帽子
+        \end{itemize}
+        \item 保健用具
+        \begin{itemize}
+            \item 絆創膏
+            \item 常備薬
+            \item 着替え
+            \item 汗拭きタオル
+            \item 温泉用タオル
+            \item 日焼け止め
+            \item ゴミ袋
+        \end{itemize}
+        \item あると便利
+        \begin{itemize}
+            \item アイマスク
+            \item 耳栓
+            \item マスク
+        \end{itemize}
+    \end{itemize}
+\end{multicols}
+
+\section{企責の持ち物}
+
+\begin{multicols}{2}
+    \begin{itemize}
+        \item 保険セット×4
+        \item ゲイター
+        \item 携帯用酸素ボンベ
+        \item コッヘル小×2
+        \item カートリッジ×2
+        \item ストーブ×2
+        \item 新聞紙
+        \item ウェッティー
+    \end{itemize}
+\end{multicols}
+
+\section{食糧計画}
+
+\begin{table}[H]
+\begin{tabular}{lcc}
+    \hline
+    & 1 日目 & 2 日目 \\
+    朝食 & & 山小屋 \\
+    昼食 & 各自 & 各自 \\
+    夕食 & 山小屋 & \\
+    \hline
+\end{tabular}
+\end{table}
+
+ご来光前にレモネードを作る。
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
