@@ -73,10 +73,16 @@
         borderline south={1pt}{0pt}{black!80},
         left=10pt,
         boxsep=5pt,
+        after={
+            % ページの最後に来ることを回避
+            \tcb@parfillskip@check
+            \par\nointerlineskip
+            \nobreak
+            \vspace{1\zh}
+        },
     ]
         \headfont\large#2
     \end{tcolorbox}
-    \vspace{0.5\zh}
 }
 
 % susbsection
