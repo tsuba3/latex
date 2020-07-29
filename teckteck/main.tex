@@ -20,9 +20,10 @@
 \usepackage{multicol}
 \usepackage{tabularx}
 \usepackage{tcolorbox}
-\tcbuselibrary{skins}
+\tcbuselibrary{breakable,hooks,skins,xparse}
 \usepackage{tikz}
 \usepackage{titlesec} % Section などの設定
+\usepackage{varwidth}
 
 \makeatletter
 
@@ -47,7 +48,6 @@
         \end{minipage}
     }
 }
-\renewenvironment{abstract}{\par\leftskip=3\zw\rightskip=\leftskip\small}{\par}
 
 %  _   _                _ _ _
 % | | | | ___  __ _  __| | (_)_ __   ___  ___
@@ -85,6 +85,82 @@
 
 %% subsubsection
 \titleformat{\subsubsection}{\headfont}{}{0pt}{}
+
+%     _    _         _                  _
+%    / \  | |__  ___| |_ _ __ __ _  ___| |_
+%   / _ \ | '_ \/ __| __| '__/ _` |/ __| __|
+%  / ___ \| |_) \__ \ |_| | | (_| | (__| |_
+% /_/   \_\_.__/|___/\__|_|  \__,_|\___|\__|
+%
+
+% Original: https://github.com/Yasunari/ascolorbox/blob/master/ascolorbox.sty
+% LICENSE: https://github.com/Yasunari/ascolorbox/blob/master/LICENSE
+\DeclareTColorBox{ascolorbox4}{ o m O{3} O{}}%
+{enhanced, colback=white, colframe=white,
+attach boxed title to top left={xshift=1cm,yshift=-\tcboxedtitleheight/2}, fonttitle=\bfseries,varwidth boxed title=0.85\linewidth, coltitle=black, fonttitle=\gtfamily,
+enlarge top by=2mm, enlarge bottom by=2mm, breakable, sharp corners,
+boxed title style={colback=white,left=0mm,right=0mm},
+borderline={.75pt}{#3pt}{black,dotted},
+underlay unbroken={\draw[black,line width=.5pt]
+       (title.east|-frame.north east)--([xshift=-#3*4pt]frame.north east)
+       arc [start angle=180, end angle=270, radius=#3*4pt]
+       -- ([yshift=#3*4pt]frame.south east)
+       arc [start angle=90, end angle=180, radius=#3*4pt]
+       -- ([xshift=#3*4pt]frame.south west)
+       arc [start angle=0, end angle=90, radius=#3*4pt]
+       -- ([yshift=-#3*4pt]frame.north west)
+       arc [start angle=270, end angle=360, radius=#3*4pt]
+       -- (frame.north west-|title.west) ;
+       \filldraw[fill=gray,draw=gray]
+       (frame.north east) -- +(0pt,-#3*2pt) -- +(-#3*2pt,-#3*2pt) -- +(-#3*2pt,0pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.south east) -- +(-#3*2pt,0pt) -- +(-#3*2pt,#3*2pt) -- +(0pt,#3*2pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.south west) -- +(0pt,#3*2pt) -- +(#3*2pt,#3*2pt) -- +(#3*2pt,0pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.north west) -- +(0pt,-#3*2pt) -- +(#3*2pt,-#3*2pt) -- +(#3*2pt,0pt) -- cycle;
+       },
+underlay first={\draw[black,line width=.5pt]
+       (title.east|-frame.north east)--([xshift=-#3*4pt]frame.north east)
+       arc [start angle=180, end angle=270, radius=#3*4pt]
+       -- (frame.south east) ;
+       \draw[black,line width=.5pt]
+       (frame.south west)
+       -- ([yshift=-#3*4pt]frame.north west)
+       arc [start angle=270, end angle=360, radius=#3*4pt]
+       -- (frame.north west-|title.west) ;
+       \filldraw[fill=gray,draw=gray]
+       (frame.north east) -- +(0pt,-#3*2pt) -- +(-#3*2pt,-#3*2pt) -- +(-#3*2pt,0pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.north west) -- +(0pt,-#3*2pt) -- +(#3*2pt,-#3*2pt) -- +(#3*2pt,0pt) -- cycle;
+       },
+underlay middle={\draw[black,line width=.5pt]
+       (frame.north east)--(frame.south east) ;
+       \draw[black,line width=.5pt]
+       (frame.south west)--(frame.north west) ;
+       },
+underlay last={\draw[black,line width=.5pt]
+       (frame.north east) -- ([yshift=#3*4pt]frame.south east)
+       arc [start angle=90, end angle=180, radius=#3*4pt]
+       -- ([xshift=#3*4pt]frame.south west)
+       arc [start angle=0, end angle=90, radius=#3*4pt]
+       -- (frame.north west);
+              \filldraw[fill=gray,draw=gray]
+       (frame.south east) -- +(-#3*2pt,0pt) -- +(-#3*2pt,#3*2pt) -- +(0pt,#3*2pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.south west) -- +(0pt,#3*2pt) -- +(#3*2pt,#3*2pt) -- +(#3*2pt,0pt) -- cycle;
+       },
+IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
+
+\renewenvironment{abstract}{
+    \par\leftskip=3\zw\rightskip=\leftskip\small}{\par}
+\renewenvironment{abstract}{
+    \par\leftskip=3\zw\rightskip=\leftskip
+    \begin{ascolorbox4}{\small 概要・山の見どころ}[2][width=\textwidth-6\zw]
+    \small
+}{
+    \end{ascolorbox4}
+}
 
 \makeatother
 
@@ -139,8 +215,6 @@
     登りは雄大な眺めを楽しめ、下りは大砂走りができます!
     下山後には富士山の見える温泉で疲れを癒します。
 \end{abstract}
-
-\vspace{1cm}
 
 %  _____                           _
 % | ____|_  ____ _ _ __ ___  _ __ | | ___
