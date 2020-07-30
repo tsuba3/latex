@@ -17,6 +17,7 @@
 \usepackage{here}     % 図表をその場に表示
 \usepackage[unicode]{hyperref} % PDF のメタデータ生成
 \usepackage{ifthen}
+\usepackage{luacode}
 \usepackage{luacolor}
 \usepackage{lua-ul}
 \usepackage{multicol}
@@ -50,6 +51,94 @@
         \end{minipage}
     }
 }
+
+%  _____ _ _   _
+% |_   _(_) |_| | ___
+%   | | | | __| |/ _ \
+%   | | | | |_| |  __/
+%   |_| |_|\__|_|\___|
+%
+\newcommand*{\docgroupname}[1]{\gdef\@docgroupname{#1}}
+\newcommand*{\doctype}[1]{\gdef\@doctype{#1}}
+\newcommand*{\docversion}[1]{\gdef\@docversion{#1}}
+\newcommand*{\yoteibi}[1]{\gdef\@yoteibi{#1}}
+\newcommand*{\yobibi}[1]{\gdef\@yobibi{#1}}
+\newcommand*{\keyword}[1]{\@namedef{keyword/\arabic{keyword}}{#1}\stepcounter{keyword}}
+\newcommand*{\kiseki}[5]{%
+    \@namedef{kiseki/1/\arabic{kiseki}}{#1}
+    \@namedef{kiseki/2/\arabic{kiseki}}{#2}
+    \@namedef{kiseki/3/\arabic{kiseki}}{#3}
+    \@namedef{kiseki/4/\arabic{kiseki}}{#4}
+    \@namedef{kiseki/5/\arabic{kiseki}}{#5}
+    \stepcounter{kiseki}
+}
+\docgroupname{TECKTECK}
+\doctype{山行企画カード 2020}
+\docversion{第 0 版}
+\yoteibi{}
+\yobibi{}
+
+\newcounter{keyword}
+\setcounter{keyword}{1}
+\newcounter{kiseki}
+\setcounter{kiseki}{1}
+
+\newcommand*{\kisekitableline}[1]{%
+    \quad\kintou{6}{\@nameuse{kiseki/1/#1}}
+    &(&
+    \kintou{6}{\@nameuse{kiseki/2/#1}} &
+    \@nameuse{kiseki/3/#1}\quad 期
+    &)&
+    \quad TEL: &
+    \@nameuse{kiseki/4/#1} &
+    \quad \@nameuse{kiseki/5/#1}\quad \\
+    \hline
+}
+
+\renewcommand{\maketitle}{%
+    \medskip\noindent%
+    \makebox[0pt][l]{\@docgroupname}%
+    \makebox[\textwidth][c]{\@doctype}%
+    \makebox[0pt][r]{\@docversion}
+
+    \begin{tcolorbox}[colback=white]
+        \centering\Huge{\@title}
+    \end{tcolorbox}
+
+    \noindent
+    \makebox[\textwidth][l]{%
+        \ifthenelse{\equal{\@yoteibi}{}}{}{%
+            期日：\quad \@yoteibi \qquad%
+        }%
+        \ifthenelse{\equal{\@yobibi}{}}{}{%
+        予備日：\quad \@yobibi%
+        }%
+    }%
+    \makebox[0pt][r]{%
+        \addtocounter{keyword}{-1}
+        \foreach \i in {1,...,\arabic{keyword}} {
+            \fbox{\@nameuse{keyword/\i}}%
+        }%
+    }
+
+    \ifthenelse{\value{kiseki}=1}{}{%
+    \noindent 企責：
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{llllllll}
+        \directlua{printkisekitable(\arabic{kiseki}-1)}
+    \end{tabular}
+    \end{table}
+    }
+}
+
+\begin{luacode*}
+function printkisekitable(n)
+    for i=1,n do
+    tex.sprint(string.format("\\kisekitableline{%d}", i))
+    end
+end
+\end{luacode*}
 
 %  _   _                _ _ _
 % | | | | ___  __ _  __| | (_)_ __   ___  ___
@@ -192,35 +281,14 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 %   | | | | |_| |  __/
 %   |_| |_|\__|_|\___|
 %
-{\medskip\noindent
-\makebox[0pt][l]{TECKTECK}%
-\makebox[\textwidth][c]{山行企画カード 2020}%
-\makebox[0pt][r]{第 1 版}}
-
-\begin{tcolorbox}[colback=white]
-    \centering\Huge{富士山}
-\end{tcolorbox}
-
-{\noindent
-\makebox[\textwidth][l]{%
-期日：\quad m 月 n 日\qquad
-予備日：\quad m 月 n + 3 日
-}\makebox[0pt][r]{\fbox{1泊2日} \fbox{朝発}}}
-
-%     _         _   _
-%    / \  _   _| |_| |__   ___  _ __
-%   / _ \| | | | __| '_ \ / _ \| '__|
-%  / ___ \ |_| | |_| | | | (_) | |
-% /_/   \_\__,_|\__|_| |_|\___/|_|
-%
-{\noindent 企責：
-\begin{table}[H]
-\centering
-\begin{tabular}{llllllll}
-    \quad\kintou{6}{五神　真} &(& \kintou{6}{東京大学} & 57\quad 期 &)& \quad TEL: & 080-987-654 & \quad Hardbank\quad \\\hline
-    \quad\kintou{6}{御茶ノ水　お茶子} &(& \kintou{6}{御茶の水女子大学} & 57\quad 期  &)& \quad TEL: & 090-123-456 & \quad dokomo\quad \\\hline
-\end{tabular}
-\end{table}}
+\title{富士山}
+\yoteibi{7 月 29 日}
+\yobibi{7 月 31 日}
+\keyword{1泊2日}
+\keyword{朝発}
+\kiseki{五神　真}{東京大学}{57}{080-987-654}{Hardbank}
+\kiseki{御茶ノ水　お茶子}{お茶の水女子大学}{57}{090-123-456}{dokomo}
+\maketitle
 
 %     _    _         _                  _
 %    / \  | |__  ___| |_ _ __ __ _  ___| |_
