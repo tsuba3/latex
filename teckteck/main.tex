@@ -17,6 +17,8 @@
 \usepackage{here}     % 図表をその場に表示
 \usepackage[unicode]{hyperref} % PDF のメタデータ生成
 \usepackage{ifthen}
+\usepackage{luacolor}
+\usepackage{lua-ul}
 \usepackage{multicol}
 \usepackage{tabularx}
 \usepackage{tcolorbox}
@@ -165,6 +167,21 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 }{
     \end{ascolorbox4}
 }
+
+%  _____                          _
+% |  ___|__  _ __ _ __ ___   __ _| |_ ___
+% | |_ / _ \| '__| '_ ` _ \ / _` | __/ __|
+% |  _| (_) | |  | | | | | | (_| | |_\__ \
+% |_|  \___/|_|  |_| |_| |_|\__,_|\__|___/
+%
+
+% emph: emphsize text
+% \emph make text bold.
+% \emph* make text highlighted.
+\definecolor{highlightColor}{cmyk}{0,0,0,0.2}
+\renewcommand*{\emph}{\@ifstar\@emphs\@emph}
+\newcommand*{\@emphs}[1]{\highLight[highlightColor]{#1}}
+\newcommand*{\@emph}[1]{\textbf{#1}}
 
 \makeatother
 
@@ -467,7 +484,8 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 %                           |_|
 %                                   of sections
 \section[せくしょん]{セクション}
-\jalipsum{jugemu}
+\emph{\jalipsum{jugemu}}
+\emph*{\jalipsum{jugemu}}
 \subsection{サブセクション}
 \jalipsum[1]{wagahai}
 \subsubsection{サブサブセクション}
