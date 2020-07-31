@@ -25,6 +25,7 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable,hooks,skins,xparse}
 \usepackage{tikz}
+\usetikzlibrary{calc, shapes}
 \usepackage{titlesec} % Section などの設定
 \usepackage{varwidth}
 
@@ -69,10 +70,16 @@
 % \definecolor{primaryTextColor}{rgb}{0.48,0,0.1}
 % \definecolor{highlightColor}{rgb}{0.95,0.8,0.9}
 
+% 共通
+\definecolor{infoColor}{rgb}{0,0,1}
+\definecolor{warnColor}{rgb}{1,0.5,0}
+
 % モノクロ
 % \definecolor{primaryColor}{cmyk}{0,0,0,1}
 % \definecolor{primaryTextColor}{rgb}{0,0,0}
 % \definecolor{highlightColor}{cmyk}{0,0,0,0.2}
+% \definecolor{infoColor}{cmyk}{0,0,0,1}
+% \definecolor{warnColor}{cmyk}{0,0,0,1}
 
 %  _____ _ _   _
 % |_   _(_) |_| | ___
@@ -307,6 +314,51 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
     \renewcommand*{\labelitemiii}{△}
 }{%
     \end{itemize}
+}
+
+% information box environment
+\newenvironment{info}{%
+\begin{tcolorbox}[
+    empty,
+    boxsep=5pt,
+    left=15pt,
+    bottom=5pt,
+    enlarge top by=4mm,
+    enlarge bottom by=2mm,
+    underlay={
+        \draw (frame.north west) [xshift=2mm,yshift=-2mm] circle (2mm)
+            [fill=infoColor,draw=none];
+        \node [anchor=center,xshift=2mm,yshift=-2mm]
+            at (frame.north west) {\color{white}\textbf i};
+        \draw[-,line width=2pt,draw=infoColor]
+            (frame.north west){}+(2mm,-5mm) -- ($(frame.south west)+(2mm,0mm)$);
+    },
+]
+}{%
+\end{tcolorbox}
+}
+
+\newenvironment{warn}{%
+\begin{tcolorbox}[
+    empty,
+    boxsep=5pt,
+    left=15pt,
+    bottom=5pt,
+    enlarge top by=4mm,
+    enlarge bottom by=2mm,
+    underlay={
+        \path[fill=warnColor]
+            ($(frame.north west)+(2mm, 0)$)
+            -- ++(-60:4.5mm) -- ++(-180:4.5mm);
+        \node [anchor=center,xshift=2mm,yshift=-2.2mm]
+            at (frame.north west) {\color{white}\textbf !};
+        \draw[-,line width=2pt,draw=warnColor]
+            (frame.north west){}+(2mm,-5mm) -- ($(frame.south west)+(2mm,0mm)$);
+    },
+]
+    \textbf{注意}\quad
+}{%
+\end{tcolorbox}
 }
 
 \makeatother
@@ -595,6 +647,18 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 \jalipsum[1]{wagahai}
 \subsubsection{サブサブセクション}
 \jalipsum[1]{wagahai}
+
+\begin{info}
+    \jalipsum{jugemu}
+\end{info}
+
+夏目漱石
+
+\begin{warn}
+    \jalipsum[1]{wagahai}
+\end{warn}
+
+\jalipsum{jugemu}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
