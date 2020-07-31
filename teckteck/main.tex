@@ -299,6 +299,16 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 \newcommand*{\@emphs}[1]{\highLight[highlightColor]{#1}}
 \newcommand*{\@emph}[1]{\textbf{#1}}
 
+% Checkbox environment
+\newenvironment{checkbox}{%
+    \begin{itemize}
+    \renewcommand*{\labelitemi}{□}
+    \renewcommand*{\labelitemii}{◯}
+    \renewcommand*{\labelitemiii}{△}
+}{%
+    \end{itemize}
+}
+
 \makeatother
 
 \begin{document}
@@ -487,7 +497,7 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 \section{持ち物}
 
 \begin{multicols}{2}
-    \begin{itemize}
+    \begin{checkbox}
         \item 回収金(12,000 円)
         \item エスケープ用のお金(8,000 円 程度)
         \item 保険証
@@ -499,7 +509,7 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
         \item 防寒着(フリースやユニクロのウルトラライトダウンなど)
         \item 体温調節しやすい服
         \item 登山用具
-        \begin{itemize}
+        \begin{checkbox}
             \item ザック
             \item 山靴
             \item 替えの靴紐
@@ -507,9 +517,9 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
             \item 1/25000 地図(事前にコースを書いておく)
             \item 本紙
             \item マップケース(ジップロック などで可)
-        \end{itemize}
+        \end{checkbox}
         \item 雨具
-        \begin{itemize}
+        \begin{checkbox}
             \item セパレ
             \item ザックカバー
             \item 1 日目の昼食
@@ -521,9 +531,9 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
             \item カイロ
             \item 軍手
             \item 帽子
-        \end{itemize}
+        \end{checkbox}
         \item 保健用具
-        \begin{itemize}
+        \begin{checkbox}
             \item 絆創膏
             \item 常備薬
             \item 着替え
@@ -531,20 +541,20 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
             \item 温泉用タオル
             \item 日焼け止め
             \item ゴミ袋
-        \end{itemize}
+        \end{checkbox}
         \item あると便利
-        \begin{itemize}
+        \begin{checkbox}
             \item アイマスク
             \item 耳栓
             \item マスク
-        \end{itemize}
-    \end{itemize}
+        \end{checkbox}
+    \end{checkbox}
 \end{multicols}
 
 \section{企責の持ち物}
 
 \begin{multicols}{2}
-    \begin{itemize}
+    \begin{checkbox}
         \item 保険セット×4
         \item ゲイター
         \item 携帯用酸素ボンベ
@@ -553,7 +563,7 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
         \item ストーブ×2
         \item 新聞紙
         \item ウェッティー
-    \end{itemize}
+    \end{checkbox}
 \end{multicols}
 
 \section{食糧計画}
