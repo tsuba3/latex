@@ -28,6 +28,7 @@
 \usetikzlibrary{calc, shapes}
 \usepackage{titlesec} % Section などの設定
 \usepackage{varwidth}
+\usepackage{xparse}
 
 \makeatletter
 
@@ -379,6 +380,75 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 \end{tcolorbox}
 }
 
+%     _        _   _               ____  _
+%    / \   ___| |_(_) ___  _ __   |  _ \| | __ _ _ __
+%   / _ \ / __| __| |/ _ \| '_ \  | |_) | |/ _` | '_ \
+%  / ___ \ (__| |_| | (_) | | | | |  __/| | (_| | | | |
+% /_/   \_\___|\__|_|\___/|_| |_| |_|   |_|\__,_|_| |_|
+%
+
+\newlength{\actionplanWidth}
+\setlength{\actionplanWidth}{\textwidth-10mm}
+\newlength{\actionplanLineHeight}
+\setlength{\actionplanLineHeight}{1.5cm}
+
+% 場所を宣言 {名前}[上の注釈]{到着時刻}{出発時刻}
+\NewDocumentCommand\spot{m O{} m m}{%
+    \directlua{actionplan_add_spot(\luastringN{#1}, \luastringN{#2}, \luastringN{#3}, \luastringN{#4})}
+}
+
+\NewDocumentCommand\actionpath{m m m}{%
+\directlua{actionplan_add_path(\luastringN{#1}, \luastringN{#2}, \luastringN{#3})}
+}
+
+% 徒歩での移動 {上の注釈}[下の注釈]
+\NewDocumentCommand\walk{mO{}}{%
+    \actionpath{\footnote#1}{\footnote#2}{-}
+}
+
+% 乗り物での移動 {上の注釈}[下の注釈]
+\NewDocumentCommand\ride{mO{}}{%
+    \actionpath{#1}{#2}{double}
+}
+
+\newenvironment{actionplan}{%
+    \directlua{actionplan_init()}
+}{%
+    \directlua{actionplan_print()}
+}
+
+\begin{luacode*}
+function actionplan_init()
+    actionplan = {
+        spot = {},
+        path = {},
+    }
+end
+
+function actionplan_add_spot(name, mark, s, t)
+    actionplan.spot[#actionplan.spot+1] = {name=name, mark=mark, s=s, t=t}
+end
+
+function actionplan_add_path(top, bottom, options)
+    actionplan.path[#actionplan.path+1] = {top=top, bottom=bottom, options=options}
+end
+
+function actionplan_print()
+    if #actionplan.path < 0 or #actionplan.spot ~= #actionplan.path + 1 then
+        tex.sprint("\\errmessage{spot と path の数が不正です。}")
+        return
+    end
+    local figwidth = tex.skip['actionplanWidth'].width
+    local lineheight = tex.skip['actionplanLineHeight'].width
+    local currentLine = 0
+    local obj = {}
+    local remainWidth = figwidth
+    tex.sprint("\\begin{tikzpicture}")
+    tex.sprint("\\end{tikzpicture}")
+    tex.print(string.format('%fcm %fcm', figwidth/tex.sp('1cm'), lineheight/tex.sp('1cm')))
+end
+\end{luacode*}
+
 \makeatother
 
 \begin{document}
@@ -678,6 +748,14 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 \end{warn}
 
 \jalipsum{jugemu}
+
+\begin{actionplan}
+    \spot{新宿駅}{6:30}{7:02}
+    \ride{小田急小田原線}
+    \spot{新松田駅}{8:32}{}
+    \walk{4分}
+    \spot{松田駅}{}{8:37}
+\end{actionplan}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
