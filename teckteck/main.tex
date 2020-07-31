@@ -83,6 +83,15 @@
 \newcounter{kiseki}
 \setcounter{kiseki}{1}
 
+\newenvironment{kisekilist}{
+    \par
+    \centering
+    \begin{tabular}{llllllll}
+}{
+    \end{tabular}
+    \par
+}
+
 \newcommand*{\kisekitableline}[1]{%
     \quad\kintou{6}{\@nameuse{kiseki/1/#1}}
     &(&
@@ -123,12 +132,9 @@
 
     \ifthenelse{\value{kiseki}=1}{}{%
     \noindent 企責：
-    \begin{table}[H]
-    \centering
-    \begin{tabular}{llllllll}
+    \begin{kisekilist}
         \directlua{printkisekitable(\arabic{kiseki}-1)}
-    \end{tabular}
-    \end{table}
+    \end{kisekilist}
     }
 }
 
