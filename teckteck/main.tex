@@ -391,7 +391,7 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 \newlength{\actionplanWidth}
 \setlength{\actionplanWidth}{\textwidth-10mm}
 \newlength{\actionplanLineHeight}
-\setlength{\actionplanLineHeight}{1.5cm}
+\setlength{\actionplanLineHeight}{1.8cm}
 \newlength{\actionplanPathRemainWidth}
 \setlength{\actionplanPathRemainWidth}{5mm}
 \newlength{\actionplanPathMargin}
@@ -399,7 +399,7 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 
 % 場所を宣言 {名前}[上の注釈]{到着時刻}{出発時刻}
 \NewDocumentCommand\spot{m O{} m m}{%
-    \directlua{actionplan_add_spot(\luastringN{#1}, \luastringN{#2}, \luastringN{\scriptsize#3}, \luastringN{\scriptsize#4})}
+    \directlua{actionplan_add_spot(\luastringN{#1}, \luastringN{\footnotesize#2}, \luastringN{\scriptsize#3}, \luastringN{\scriptsize#4})}
 }
 
 \NewDocumentCommand\actionpath{m m m}{%
@@ -470,10 +470,12 @@ function actionplan_print_impl()
     local remainWidth = figwidth
     local function make_spot(spot, x, y)
         local name = "spot"..spot.idx
-        local box = "\\node [draw,anchor=west,minimum width="..spot.time_width.."sp] ("..name..") at ("..x.."sp, "..y.."sp) {"..spot.name.."};"
+        local min_width = math.min(spot.time_width, spot.mark_width)
+        local box = "\\node [draw,anchor=west,minimum width="..min_width.."sp] ("..name..") at ("..x.."sp, "..y.."sp) {"..spot.name.."};"
+        local mark = "\\node [above=3pt of "..name..".north,anchor=south,inner sep=0pt] {"..spot.mark.."};"
         local time = "\\node [below=3pt of "..name..".south west,anchor=north west,inner sep=0pt] {"..spot.s.."};"
         time = time.."\\node [below=3pt of "..name..".south east,anchor=north east,inner sep=0pt] {"..spot.t.."};"
-        return box..time
+        return box..mark..time
     end
     local function make_path(path, left, right)
         local x = "\\draw ["..path.options.."] ("..left..") to" -- TODO
@@ -554,6 +556,7 @@ function actionplan_print_impl()
 
     -- spot の幅を求める
     for i=1,#actionplan.spot do
+        actionplan.spot[i].mark_width = get_width(actionplan.spot[i].mark)
         actionplan.spot[i].time_width = get_width(actionplan.spot[i].s) + tex.sp('1mm') + get_width(actionplan.spot[i].t)
         actionplan.spot[i].width = get_width('\\tikz{'..make_spot(actionplan.spot[i], 0, 0)..'}')
     end
@@ -629,17 +632,17 @@ end
     \ride{JR 御殿場線}[下の注釈]
     \spot{御殿場駅}{9:23}{9:30}
     \walk{45分}
-    \spot{富士宮口五合目}{10:30}{11:00}
+    \spot{富士宮口五合目}[WC]{10:30}{11:00}
     \walk{25分}
     \spot{宝永第一火口}{11:45}{11:55}
     \walk{1時間15分}
-    \spot{宝永山山頂}{12:55}{13:30}
+    \spot{宝永山山頂}[写真]{12:55}{13:30}
     \walk{25分}
     \spot{走り六合}{13:55}{14:05}
     \walk{75分 + 休 10 分}
     \spot{七合目}{15:30}{15:40}
     \walk{1時間10分}
-    \spot{赤岩八号館}{15:40}{16:50}
+    \spot{赤岩八号館}[WC]{15:40}{16:50}
 \end{actionplan}
 \end{figure}
 
