@@ -392,10 +392,10 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 \setlength{\actionplanWidth}{\textwidth-10mm}
 \newlength{\actionplanLineHeight}
 \setlength{\actionplanLineHeight}{1.5cm}
-\newlength{\actionplanPathMin}
-\setlength{\actionplanPathMin}{5mm}
-\newlength{\actionplanMinMargin}
-\setlength{\actionplanMinMargin}{3mm}
+\newlength{\actionplanPathRemainWidth}
+\setlength{\actionplanPathRemainWidth}{5mm}
+\newlength{\actionplanPathMargin}
+\setlength{\actionplanPathMargin}{5mm plus 100mm minus 2mm}
 
 % 場所を宣言 {名前}[上の注釈]{到着時刻}{出発時刻}
 \NewDocumentCommand\spot{m O{} m m}{%
@@ -460,10 +460,11 @@ function actionplan_print_impl()
     end
     local figwidth = tex.skip['actionplanWidth'].width
     local lineheight = tex.skip['actionplanLineHeight'].width
-    local pathRemainWidth = tex.skip['actionplanPathMin'].width
-    local pathMinMargin = tex.skip['actionplanMinMargin'].width
+    local pathRemainWidth = tex.skip['actionplanPathRemainWidth'].width
+    local pathNaturalMargin = tex.skip['actionplanPathMargin'].width
+    local pathMaxMargin = pathNaturalMargin + tex.skip['actionplanPathMargin'].stretch
+    local pathMinMargin = pathNaturalMargin - tex.skip['actionplanPathMargin'].shrink
     local currentLine = 0
-    local cnt = 0
     local pathCnt = 0
     local line = {}
     local remainWidth = figwidth
@@ -474,9 +475,7 @@ function actionplan_print_impl()
         time = time.."\\node [below=3pt of "..name..".south east,anchor=north east,inner sep=0pt] {"..spot.t.."};"
         return box..time
     end
-    local function make_path(path)
-        local left = 'spot'..(path.idx)
-        local right = 'spot'..(path.idx + 1)
+    local function make_path(path, left, right)
         local x = "\\draw ["..path.options.."] ("..left..") to" -- TODO
         x = x.."node[above]{"..path.top.."} ("..right..");"
         return x
@@ -485,13 +484,13 @@ function actionplan_print_impl()
         if #line == 0 then return end
         local S = "start"..currentLine -- 行の一番左の座標の名前
         local E = "end"..currentLine   -- 行の一番右の座標の名前
-        local y = currentLine * lineheight -- 基準 y 座標
+        local y = -currentLine * lineheight -- 基準 y 座標
         local x = 0 -- x 座標 (unit: sp)
         local draw = ""
 
         -- \coordinate
-        tex.sprint("\\coordinate ("..S..") at (0, "..y..");")
-        tex.sprint("\\coordinate ("..E..") at (0, "..y..");")
+        tex.sprint("\\coordinate ("..S..") at (0, "..y.."sp);")
+        tex.sprint("\\coordinate ("..E..") at ("..figwidth.."sp, "..y.."sp);")
 
         for i=1,#line do
             if line[i].type == "spot" then
@@ -499,8 +498,23 @@ function actionplan_print_impl()
                 x = x + line[i].val.width
             end
             if line[i].type == "path" then
-                draw = draw..make_path(line[i].val)
-                x = x + line[i].val.width
+                local path = line[i].val
+                local left = 'spot'..(path.idx)
+                local right = 'spot'..(path.idx + 1)
+                if i == 1 then left = S end
+                if i == #line then right = E end
+                draw = draw..make_path(path, left, right)
+                x = x + path.width
+                -- １行の幅にピッタリ収まるように調整
+                if is_last then
+                    x = x + math.min(remainWidth / pathCnt, 2 * (pathNaturalMargin - pathMinMargin))
+                else
+                    x = x + math.min(remainWidth / pathCnt, 2 * (pathMaxMargin - pathMinMargin))
+                end
+            end
+            if line[i].type == "remain-path" then
+                local path = {options=line[i].path.options, top='', bottom=''}
+                draw = draw..make_path(path, 'spot'..(line[i].path.idx), E)
             end
         end
 
@@ -511,11 +525,24 @@ function actionplan_print_impl()
         pathCnt = 0
         currentLine = currentLine + 1
     end
-    local function pushSpot(spot)
+    local function pushSpot(spot, next_path)
+        if next_path ~= nil and remainWidth - pathRemainWidth < spot.width then
+            writeLine()
+        elseif next_path == nil and remainWidth < spot.width then
+            writeLine()
+        end
+        remainWidth = remainWidth - spot.width
         line[#line + 1] = {type="spot",val=spot}
     end
     local function pushPath(path)
+        if remainWidth < path.width then
+            line[#line + 1] = {type="remain-path", path=path}
+            remainWidth = remainWidth - pathRemainWidth
+            writeLine()
+        end
+        remainWidth = remainWidth - path.width
         line[#line + 1] = {type="path", val=path}
+        pathCnt = pathCnt + 1
     end
 
     -- spot の幅を求める
@@ -533,7 +560,7 @@ function actionplan_print_impl()
 
     tex.sprint("\\begin{tikzpicture}")
     for i = 1,#actionplan.path do
-        pushSpot(actionplan.spot[i])
+        pushSpot(actionplan.spot[i], actionplan.path[i])
         pushPath(actionplan.path[i])
     end
     pushSpot(actionplan.spot[#actionplan.spot])
@@ -844,7 +871,7 @@ end
 
 \begin{actionplan}
     \spot{新宿駅}{6:30}{7:02}
-    \ride{小田急小田原線}
+    \ride{小田急小田原線（小田原行き）}
     \spot{新松田駅}{8:32}{}
     \walk{4分}
     \spot{松田駅}{}{8:37}
