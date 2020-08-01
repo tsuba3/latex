@@ -320,9 +320,9 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 
 % emph: emphsize text
 % \emph make text bold.
-% \emph* make text highlighted.
+% \emph* make text bold and highlighted.
 \renewcommand*{\emph}{\@ifstar\@emphs\@emph}
-\newcommand*{\@emphs}[1]{\highLight[highlightColor]{#1}}
+\newcommand*{\@emphs}[1]{\highLight[highlightColor]{\textbf{#1}}}
 \newcommand*{\@emph}[1]{\textbf{#1}}
 
 % Checkbox environment
