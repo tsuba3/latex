@@ -470,7 +470,7 @@ function actionplan_print_impl()
     local remainWidth = figwidth
     local function make_spot(spot, x, y)
         local name = "spot"..spot.idx
-        local box = "\\node [draw,anchor=west] ("..name..") at ("..x.."sp, "..y.."sp) {"..spot.name.."};"
+        local box = "\\node [draw,anchor=west,minimum width="..spot.time_width.."sp] ("..name..") at ("..x.."sp, "..y.."sp) {"..spot.name.."};"
         local time = "\\node [below=3pt of "..name..".south west,anchor=north west,inner sep=0pt] {"..spot.s.."};"
         time = time.."\\node [below=3pt of "..name..".south east,anchor=north east,inner sep=0pt] {"..spot.t.."};"
         return box..time
@@ -554,6 +554,7 @@ function actionplan_print_impl()
 
     -- spot の幅を求める
     for i=1,#actionplan.spot do
+        actionplan.spot[i].time_width = get_width(actionplan.spot[i].s) + tex.sp('1mm') + get_width(actionplan.spot[i].t)
         actionplan.spot[i].width = get_width('\\tikz{'..make_spot(actionplan.spot[i], 0, 0)..'}')
     end
 
