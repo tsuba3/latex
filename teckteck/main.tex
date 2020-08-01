@@ -419,15 +419,19 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 \newenvironment{actionplan}{%
     \directlua{actionplan_init()}
 }{%
-    \directlua{actionplan_print()}
+    \actionplanPrint
+}
+
+\newif\ifcontinue
+\newcommand*{\actionplanPrint}{%
+    \continuetrue
+    \directlua{myco = coroutine.create(actionplan_print_impl)}
+    \loop
+    \directlua{local ok = coroutine.resume(myco) if ok then else tex.sprint(\luastringN{\continuefalse}) end}
+    \ifcontinue\repeat
 }
 
 \begin{luacode*}
-function tex_exec()
-    tex.sprint("\\directlua{coroutine.resume(myco)}")
-    coroutine.yield()
-end
-
 function actionplan_init()
     actionplan = {
         spot = {},
@@ -443,14 +447,9 @@ function actionplan_add_path(top, bottom, options)
     actionplan.path[#actionplan.path+1] = {top=top, bottom=bottom, options=options, idx=#actionplan.path+1}
 end
 
-function actionplan_print()
-    myco = coroutine.create(actionplan_print_impl)
-    coroutine.resume(myco)
-end
-
 local function get_width(txt)
     tex.sprint("\\settowidth{\\actionplantemp}{"..txt.."}")
-    tex_exec()
+    coroutine.yield()
     return tex.skip['actionplantemp'].width
 end
 
