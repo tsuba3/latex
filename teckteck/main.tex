@@ -514,7 +514,12 @@ function actionplan_print_impl()
             end
             if line[i].type == "remain-path" then
                 local path = {options=line[i].path.options, top='', bottom=''}
-                draw = draw..make_path(path, 'spot'..(line[i].path.idx), E)
+                if i == 1 then
+                    draw = draw..make_path(path, S, 'spot'..(line[i].path.idx + 1))
+                    x = x + pathRemainWidth
+                else
+                    draw = draw..make_path(path, 'spot'..(line[i].path.idx), E)
+                end
             end
         end
 
@@ -525,9 +530,11 @@ function actionplan_print_impl()
         pathCnt = 0
         currentLine = currentLine + 1
     end
-    local function pushSpot(spot, next_path)
+    local function pushSpot(spot, next_path, prev_path)
         if next_path ~= nil and remainWidth - pathRemainWidth < spot.width then
             writeLine()
+            line[#line + 1] = {type="remain-path", path=prev_path}
+            remainWidth = remainWidth - pathRemainWidth
         elseif next_path == nil and remainWidth < spot.width then
             writeLine()
         end
@@ -560,7 +567,7 @@ function actionplan_print_impl()
 
     tex.sprint("\\begin{tikzpicture}")
     for i = 1,#actionplan.path do
-        pushSpot(actionplan.spot[i], actionplan.path[i])
+        pushSpot(actionplan.spot[i], actionplan.path[i], actionplan.path[i - 1])
         pushPath(actionplan.path[i])
     end
     pushSpot(actionplan.spot[#actionplan.spot])
