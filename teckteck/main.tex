@@ -394,19 +394,21 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 \setlength{\actionplanLineHeight}{1.5cm}
 \newlength{\actionplanPathMin}
 \setlength{\actionplanPathMin}{5mm}
+\newlength{\actionplanMinMargin}
+\setlength{\actionplanMinMargin}{3mm}
 
 % 場所を宣言 {名前}[上の注釈]{到着時刻}{出発時刻}
 \NewDocumentCommand\spot{m O{} m m}{%
-    \directlua{actionplan_add_spot(\luastringN{#1}, \luastringN{#2}, \luastringN{#3}, \luastringN{#4})}
+    \directlua{actionplan_add_spot(\luastringN{#1}, \luastringN{#2}, \luastringN{\scriptsize#3}, \luastringN{\scriptsize#4})}
 }
 
 \NewDocumentCommand\actionpath{m m m}{%
-\directlua{actionplan_add_path(\luastringN{#1}, \luastringN{#2}, \luastringN{#3})}
+    \directlua{actionplan_add_path(\luastringN{#1}, \luastringN{#2}, \luastringN{#3})}
 }
 
 % 徒歩での移動 {上の注釈}[下の注釈]
 \NewDocumentCommand\walk{mO{}}{%
-    \actionpath{\footnote#1}{\footnote#2}{-}
+    \actionpath{\footnotesize#1}{\footnotesize#2}{-}
 }
 
 % 乗り物での移動 {上の注釈}[下の注釈]
@@ -434,11 +436,11 @@ function actionplan_init()
 end
 
 function actionplan_add_spot(name, mark, s, t)
-    actionplan.spot[#actionplan.spot+1] = {name=name, mark=mark, s=s, t=t}
+    actionplan.spot[#actionplan.spot+1] = {name=name, mark=mark, s=s, t=t, idx=#actionplan.spot+1}
 end
 
 function actionplan_add_path(top, bottom, options)
-    actionplan.path[#actionplan.path+1] = {top=top, bottom=bottom, options=options}
+    actionplan.path[#actionplan.path+1] = {top=top, bottom=bottom, options=options, idx=#actionplan.path+1}
 end
 
 function actionplan_print()
@@ -460,20 +462,83 @@ function actionplan_print_impl()
     local figwidth = tex.skip['actionplanWidth'].width
     local lineheight = tex.skip['actionplanLineHeight'].width
     local pathRemainWidth = tex.skip['actionplanPathMin'].width
+    local pathMinMargin = tex.skip['actionplanMinMargin'].width
     local currentLine = 0
     local cnt = 0
     local pathCnt = 0
     local line = {}
     local remainWidth = figwidth
-    local function makeSpot(spot)
+    local function make_spot(spot, x, y)
+        local name = "spot"..spot.idx
+        local box = "\\node [draw,anchor=west] ("..name..") at ("..x.."sp, "..y.."sp) {"..spot.name.."};"
+        local time = "\\node [below=3pt of "..name..".south west,anchor=north west,inner sep=0pt] {"..spot.s.."};"
+        time = time.."\\node [below=3pt of "..name..".south east,anchor=north east,inner sep=0pt] {"..spot.t.."};"
+        return box..time
     end
-    local function writeLine()
+    local function make_path(path)
+        local left = 'spot'..(path.idx)
+        local right = 'spot'..(path.idx + 1)
+        local x = "\\draw ["..path.options.."] ("..left..") to" -- TODO
+        x = x.."node[above]{"..path.top.."} ("..right..");"
+        return x
+    end
+    local function writeLine(is_last)
+        if #line == 0 then return end
+        local S = "start"..currentLine -- 行の一番左の座標の名前
+        local E = "end"..currentLine   -- 行の一番右の座標の名前
+        local y = currentLine * lineheight -- 基準 y 座標
+        local x = 0 -- x 座標 (unit: sp)
+        local draw = ""
+
+        -- \coordinate
+        tex.sprint("\\coordinate ("..S..") at (0, "..y..");")
+        tex.sprint("\\coordinate ("..E..") at (0, "..y..");")
+
+        for i=1,#line do
+            if line[i].type == "spot" then
+                tex.sprint(make_spot(line[i].val, x, y))
+                x = x + line[i].val.width
+            end
+            if line[i].type == "path" then
+                draw = draw..make_path(line[i].val)
+                x = x + line[i].val.width
+            end
+        end
+
+        tex.sprint(draw)
+
+        line = {}
+        remainWidth = figwidth
+        pathCnt = 0
+        currentLine = currentLine + 1
     end
     local function pushSpot(spot)
+        line[#line + 1] = {type="spot",val=spot}
     end
     local function pushPath(path)
+        line[#line + 1] = {type="path", val=path}
     end
+
+    -- spot の幅を求める
+    for i=1,#actionplan.spot do
+        actionplan.spot[i].width = get_width('\\tikz{'..make_spot(actionplan.spot[i], 0, 0)..'}')
+    end
+
+    -- path の幅を求める
+    for i=1,#actionplan.path do
+        actionplan.path[i].width = math.max(
+            get_width(actionplan.path[i].top),
+            get_width(actionplan.path[i].bottom)
+        ) + 2 * pathMinMargin
+    end
+
     tex.sprint("\\begin{tikzpicture}")
+    for i = 1,#actionplan.path do
+        pushSpot(actionplan.spot[i])
+        pushPath(actionplan.path[i])
+    end
+    pushSpot(actionplan.spot[#actionplan.spot])
+    writeLine(true)
     tex.sprint("\\end{tikzpicture}")
 end
 \end{luacode*}
