@@ -25,7 +25,7 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable,hooks,skins,xparse}
 \usepackage{tikz}
-\usetikzlibrary{calc, shapes}
+\usetikzlibrary{calc,positioning,shapes}
 \usepackage{titlesec} % Section などの設定
 \usepackage{varwidth}
 \usepackage{xparse}
@@ -618,58 +618,29 @@ end
 % /_/   \_\___|\__|_|\___/|_| |_| |_|   |_|\__,_|_| |_|
 %
 \section{行動予定}
-\usetikzlibrary{positioning}
 \begin{figure}[H]
-\newcommand{\figwidth}{\textwidth - 10mm}
-\newcommand{\lineheight}{1.5cm}
-\newcommand{\belowtime}[3]{
-    \node [below=3pt of #1.south west,anchor=north west,inner sep=0pt] {\scriptsize #2};
-    \node [below=3pt of #1.south east,anchor=north east,inner sep=0pt] {\scriptsize #3};
-}
-\newcommand{\belowtimex}[3]{
-    \node [below=3pt of #1.south west,anchor=north west,inner sep=0pt,xshift=-3pt] {\scriptsize #2};
-    \node [below=3pt of #1.south east,anchor=north east,inner sep=0pt,xshift=3pt] {\scriptsize #3};
-}
-\newcommand{\belowtimecenter}[2]{
-    \node [below=3pt of #1.south,anchor=north,inner sep=0pt] {\scriptsize #2};
-}
 \centering
-\begin{tikzpicture}[]
-    \node [draw, anchor=west] (a) {新宿駅};
-    \belowtime{a}{6:30}{7:02}
-    \node [draw] (b) [right=5.5cm of a] {新松田駅};
-    \belowtime{b}{8:32}{}
-    \node [draw] (c) [right=1cm of b] {松田駅};
-    \belowtime{c}{}{8:37}
-    \node at (\figwidth, 0) [] (d) [inner sep=0pt] {};
-    \node [draw] (e) [below=\lineheight of a.west,anchor=west] {御殿場駅};
-    \belowtime{e}{9:23}{9:30}
-    \node [draw] (f) [right=1.2cm of e] {富士宮口五合目};
-    \belowtime{f}{10:30}{11:00}
-    \node [draw] (g) [right=1.2cm of f] {宝永第一火口};
-    \belowtime{g}{11:45}{11:55}
-    \node [draw] (h) [right=2.2cm of g] {宝永山山頂};
-    \belowtime{h}{12:55}{13:30}
-    \node (i) [below=\lineheight of d.west,anchor=west,inner sep=0pt] {};
-    \node (jj) [below=\lineheight of e.west,inner sep=0pt] {};
-    \node [draw] (j) [right=2cm of jj] {走り六合};
-    \belowtime{j}{13:55}{14:05}
-    \node [draw] (k) [right=3.5cm of j] {\makebox[3\zw][s]{七合目}};
-    \belowtimex{k}{15:30}{15:40}
-    \node [draw] (l) [right=2.5cm of k] {赤岩八号館};
-    \belowtime{l}{15:40}{16:50}
-
-    \draw [double] (a) to node[above,align=left]{小田急小田原線（小田原行き）} (b);
-    \draw [-] (b) to node[above]{\footnotesize 4分} (c);
-    \draw [double] (c) to node[above]{JR 御殿場線} (d);
-    \draw [-] (e) to node[above]{\footnotesize 45分} (f);
-    \draw [-] (f) to node[above]{\footnotesize 25分} (g);
-    \draw [-] (g) to node[above]{\footnotesize 1時間15分} (h);
-    \draw [-] (h) to node[above]{} (i);
-    \draw [-] (jj) to node[above]{\footnotesize 25分} (j);
-    \draw [-] (j) to node[above]{\footnotesize 75分 + 休10分} (k);
-    \draw [-] (k) to node[above]{\footnotesize 1時間10分} (l);
-\end{tikzpicture}
+\begin{actionplan}
+    \spot{新宿駅}{6:30}{7:02}
+    \ride{小田急小田原線（小田原行き）}
+    \spot{新松田駅}{8:32}{}
+    \walk{4分}
+    \spot{松田駅}{}{8:37}
+    \ride{JR 御殿場線}
+    \spot{御殿場駅}{9:23}{9:30}
+    \walk{45分}
+    \spot{富士宮口五合目}{10:30}{11:00}
+    \walk{25分}
+    \spot{宝永第一火口}{11:45}{11:55}
+    \walk{1時間15分}
+    \spot{宝永山山頂}{12:55}{13:30}
+    \walk{25分}
+    \spot{走り六合}{13:55}{14:05}
+    \walk{75分 + 休 10 分}
+    \spot{七合目}{15:30}{15:40}
+    \walk{1時間10分}
+    \spot{赤岩八号館}{15:40}{16:50}
+\end{actionplan}
 \end{figure}
 
 \begin{table}[H]
@@ -877,27 +848,6 @@ end
 
 \jalipsum{jugemu}
 
-\begin{actionplan}
-    \spot{新宿駅}{6:30}{7:02}
-    \ride{小田急小田原線（小田原行き）}
-    \spot{新松田駅}{8:32}{}
-    \walk{4分}
-    \spot{松田駅}{}{8:37}
-    \ride{JR 御殿場線}
-    \spot{御殿場駅}{9:23}{9:30}
-    \walk{45分}
-    \spot{富士宮口五合目}{10:30}{11:00}
-    \walk{25分}
-    \spot{宝永第一火口}{11:45}{11:55}
-    \walk{1時間15分}
-    \spot{宝永山山頂}{12:55}{13:30}
-    \walk{25分}
-    \spot{走り六合}{13:55}{14:05}
-    \walk{75分 + 休 10 分}
-    \spot{七合目}{15:30}{15:40}
-    \walk{1時間10分}
-    \spot{赤岩八号館}{15:40}{16:50}
-\end{actionplan}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
