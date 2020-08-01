@@ -413,7 +413,7 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
 
 % 乗り物での移動 {上の注釈}[下の注釈]
 \NewDocumentCommand\ride{mO{}}{%
-    \actionpath{#1}{#2}{double}
+    \actionpath{#1}{\footnotesize#2}{double}
 }
 
 \newenvironment{actionplan}{%
@@ -477,7 +477,7 @@ function actionplan_print_impl()
     end
     local function make_path(path, left, right)
         local x = "\\draw ["..path.options.."] ("..left..") to" -- TODO
-        x = x.."node[above]{"..path.top.."} ("..right..");"
+        x = x.."node[above]{"..path.top.."} node[below]{"..path.bottom.."} ("..right..");"
         return x
     end
     local function writeLine(is_last)
@@ -626,7 +626,7 @@ end
     \spot{新松田駅}{8:32}{}
     \walk{4分}
     \spot{松田駅}{}{8:37}
-    \ride{JR 御殿場線}
+    \ride{JR 御殿場線}[下の注釈]
     \spot{御殿場駅}{9:23}{9:30}
     \walk{45分}
     \spot{富士宮口五合目}{10:30}{11:00}
