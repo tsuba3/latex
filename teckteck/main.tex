@@ -13,6 +13,7 @@
 \usepackage{comment}
 \usepackage{docmute}
 \usepackage{fancyhdr} % ヘッダー
+\usepackage{fontspec}
 \usepackage[top=15mm,bottom=15mm,left=15mm,right=15mm]{geometry} % 余白等の設定
 \usepackage{here}     % 図表をその場に表示
 \usepackage[unicode]{hyperref} % PDF のメタデータ生成
@@ -583,6 +584,23 @@ function actionplan_print_impl()
 end
 \end{luacode*}
 
+% Font Awesome
+% Solid Style (fas) のアイコンは \fas{unicode}
+% Brand Style (fab) のアイコンは \fbs{unicode} で表示できる。
+% https://fontawesome.com/ でアイコンを検索できる。
+% 例　Twitter のアイコンは \fbs{f099} https://fontawesome.com/icons/twitter?style=brands
+\newfontfamily\FAB{Font Awesome 5 Brands-Regular-400.otf}
+\newfontfamily\FAS{Font Awesome 5 Free-Solid-900.otf}
+\newcommand*{\fab}[1]{{\FAB\color{gray}\symbol{\directlua{tex.sprint(0x#1)}}} }
+\newcommand*{\fas}[1]{{\FAS\color{gray}\symbol{\directlua{tex.sprint(0x#1)}}} }
+
+\newcommand*{\bed}{\fas{f236}}
+\newcommand*{\camera}{\fas{f030}}
+\newcommand*{\food}{\fas{f2e7}}
+\newcommand*{\shop}{\fas{f291}}
+\newcommand*{\twitter}{\fbs{f099}}
+\newcommand*{\wc}{\fas{f7bd}}
+
 \makeatother
 
 \begin{document}
@@ -633,19 +651,19 @@ end
     \actionpath{\small 乗り換え}{}{dashed}
     \spot{松田駅}{}{8:37}
     \ride{JR 御殿場線}[下の注釈]
-    \spot{御殿場駅}{9:23}{9:30}
+    \spot{御殿場駅}[\shop \wc]{9:23}{9:30}
     \walk{45分}
-    \spot{富士宮口五合目}[WC]{10:30}{11:00}
+    \spot{富士宮口五合目}[\camera \wc]{10:30}{11:00}
     \walk{25分}
     \spot{宝永第一火口}{11:45}{11:55}
     \walk{1時間15分}
-    \spot{宝永山山頂}[写真]{12:55}{13:30}
+    \spot{宝永山山頂}[\food \camera]{12:55}{13:30}
     \walk{25分}
     \spot{走り六合}{13:55}{14:05}
     \walk{75分 + 休 10 分}
     \spot{七合目}{15:30}{15:40}
     \walk{1時間10分}
-    \spot{赤岩八号館}[WC]{15:40}{16:50}
+    \spot{赤岩八号館}[\wc \food \bed]{15:40}{16:50}
 \end{actionplan}
 \end{figure}
 
