@@ -470,7 +470,7 @@ function actionplan_print_impl()
     local remainWidth = figwidth
     local function make_spot(spot, x, y)
         local name = "spot"..spot.idx
-        local min_width = math.min(spot.time_width, spot.mark_width)
+        local min_width = math.max(spot.time_width, spot.mark_width)
         local box = "\\node [draw,anchor=west,minimum width="..min_width.."sp] ("..name..") at ("..x.."sp, "..y.."sp) {"..spot.name.."};"
         local mark = "\\node [above=3pt of "..name..".north,anchor=south,inner sep=0pt] {"..spot.mark.."};"
         local time = "\\node [below=3pt of "..name..".south west,anchor=north west,inner sep=0pt] {"..spot.s.."};"
