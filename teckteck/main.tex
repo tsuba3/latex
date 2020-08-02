@@ -402,6 +402,7 @@ IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
     \directlua{actionplan_add_spot(\luastringN{#1}, \luastringN{\footnotesize#2}, \luastringN{\scriptsize#3}, \luastringN{\scriptsize#4})}
 }
 
+% 移動 {上の注釈}{下の注釈}{tikz のオプション}
 \NewDocumentCommand\actionpath{m m m}{%
     \directlua{actionplan_add_path(\luastringN{#1}, \luastringN{#2}, \luastringN{#3})}
 }
@@ -627,7 +628,7 @@ end
     \spot{新宿駅}{6:30}{7:02}
     \ride{小田急小田原線（小田原行き）}
     \spot{新松田駅}{8:32}{}
-    \walk{4分}
+    \actionpath{\small 乗り換え}{}{dashed}
     \spot{松田駅}{}{8:37}
     \ride{JR 御殿場線}[下の注釈]
     \spot{御殿場駅}{9:23}{9:30}
