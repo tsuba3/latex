@@ -540,6 +540,8 @@ function actionplan_print_impl()
             remainWidth = remainWidth - pathRemainWidth
         elseif next_path == nil and remainWidth < spot.width then
             writeLine()
+            line[#line + 1] = {type="remain-path", path=prev_path}
+            remainWidth = remainWidth - pathRemainWidth
         end
         remainWidth = remainWidth - spot.width
         line[#line + 1] = {type="spot",val=spot}
@@ -575,7 +577,7 @@ function actionplan_print_impl()
         pushSpot(actionplan.spot[i], actionplan.path[i], actionplan.path[i - 1])
         pushPath(actionplan.path[i])
     end
-    pushSpot(actionplan.spot[#actionplan.spot])
+    pushSpot(actionplan.spot[#actionplan.spot], nil, actionplan.path[#actionplan.spot - 1])
     writeLine(true)
     tex.sprint("\\end{tikzpicture}")
 end
