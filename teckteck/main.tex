@@ -586,9 +586,9 @@ end
 
 % Font Awesome
 % Solid Style (fas) のアイコンは \fas{unicode}
-% Brand Style (fab) のアイコンは \fbs{unicode} で表示できる。
+% Brand Style (fab) のアイコンは \fab{unicode} で表示できる。
 % https://fontawesome.com/ でアイコンを検索できる。
-% 例　Twitter のアイコンは \fbs{f099} https://fontawesome.com/icons/twitter?style=brands
+% 例　Twitter のアイコンは \fab{f099} https://fontawesome.com/icons/twitter?style=brands
 \newfontfamily\FAB{Font Awesome 5 Brands-Regular-400.otf}
 \newfontfamily\FAS{Font Awesome 5 Free-Solid-900.otf}
 \newcommand*{\fab}[1]{{\FAB\color{gray}\symbol{\directlua{tex.sprint(0x#1)}}} }
