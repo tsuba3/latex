@@ -1,0 +1,602 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% TECKTECK 企画カード（仮）
+% 作成者：　宗形　翼 (45 期)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{bxjalipsum} % 吾輩は猫である (Lorem ipsum)
+\usepackage{calc}
+\usepackage[skip=2pt]{caption} % 図とキャプションの余白を調整
+\usepackage{comment}
+\usepackage{docmute}
+\usepackage{fancyhdr} % ヘッダー
+\usepackage{fontspec}
+\usepackage[top=15mm,bottom=15mm,left=15mm,right=15mm]{geometry} % 余白等の設定
+\usepackage{here}     % 図表をその場に表示
+\usepackage[unicode]{hyperref} % PDF のメタデータ生成
+\usepackage{ifthen}
+\usepackage{luacode}
+\usepackage{luacolor}
+\usepackage{lua-ul}
+\usepackage{multicol}
+\usepackage{tabularx}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,hooks,skins,xparse}
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,shapes}
+\usepackage{titlesec} % Section などの設定
+\usepackage{varwidth}
+\usepackage{xparse}
+
+\makeatletter
+
+\newlength{\wtarget}
+\newlength{\wactual}
+\newcommand{\kintou}[2]{\kintouwidth{#1\zw}{#2}}
+\newcommand{\kintouwidth}[2]{%
+    \setlength{\wtarget}{#1}%
+    \settowidth{\wactual}{#2}%
+    \ifthenelse{\lengthtest{\wtarget < \wactual}}{%
+        \setlength{\wtarget}{1pt * \real{\strip@pt\wtarget} / \real{\strip@pt\wactual}}%
+        \scalebox{\strip@pt\wtarget}[1]{#2}%
+    }{%
+        \makebox[\wtarget][s]{#2}%
+    }%
+}
+
+\newcommand{\placeholder}[3]{%
+    \fbox{%
+        \begin{minipage}[c][#2-2\fboxsep-2\fboxrule][c]{#1-2\fboxsep-2\fboxrule}
+            \noindent\centering\Huge #3
+        \end{minipage}
+    }
+}
+
+%   ____      _
+%  / ___|___ | | ___  _ __ ___
+% | |   / _ \| |/ _ \| '__/ __|
+% | |__| (_) | | (_) | |  \__ \
+%  \____\___/|_|\___/|_|  |___/
+%
+
+% 45 期
+\definecolor{primaryColor}{rgb}{0,0.25,0}
+\definecolor{primaryTextColor}{rgb}{0,0.25,0}
+\definecolor{highlightColor}{rgb}{0.7,0.9,0.7}
+
+% 46 期
+% \definecolor{primaryColor}{rgb}{0.48,0,0.1}
+% \definecolor{primaryTextColor}{rgb}{0.48,0,0.1}
+% \definecolor{highlightColor}{rgb}{0.95,0.8,0.9}
+
+% 共通
+\definecolor{infoColor}{rgb}{0,0,0.6}
+\definecolor{warnColor}{rgb}{1,0.5,0}
+
+% モノクロ
+% \definecolor{primaryColor}{cmyk}{0,0,0,1}
+% \definecolor{primaryTextColor}{rgb}{0,0,0}
+% \definecolor{highlightColor}{cmyk}{0,0,0,0.2}
+% \definecolor{infoColor}{cmyk}{0,0,0,1}
+% \definecolor{warnColor}{cmyk}{0,0,0,1}
+
+%  _____ _ _   _
+% |_   _(_) |_| | ___
+%   | | | | __| |/ _ \
+%   | | | | |_| |  __/
+%   |_| |_|\__|_|\___|
+%
+\newcommand*{\docgroupname}[1]{\gdef\@docgroupname{#1}}
+\newcommand*{\doctype}[1]{\gdef\@doctype{#1}}
+\newcommand*{\docversion}[1]{\gdef\@docversion{#1}}
+\newcommand*{\yoteibi}[1]{\gdef\@yoteibi{#1}}
+\newcommand*{\yobibi}[1]{\gdef\@yobibi{#1}}
+\newcommand*{\keyword}[1]{\@namedef{keyword/\arabic{keyword}}{#1}\stepcounter{keyword}}
+\newcommand*{\kiseki}[5]{%
+    \@namedef{kiseki/1/\arabic{kiseki}}{#1}
+    \@namedef{kiseki/2/\arabic{kiseki}}{#2}
+    \@namedef{kiseki/3/\arabic{kiseki}}{#3}
+    \@namedef{kiseki/4/\arabic{kiseki}}{#4}
+    \@namedef{kiseki/5/\arabic{kiseki}}{#5}
+    \stepcounter{kiseki}
+}
+\newcommand*{\zaikyo}[5]{%
+    \@namedef{zaikyo/1/\arabic{zaikyo}}{#1}
+    \@namedef{zaikyo/2/\arabic{zaikyo}}{#2}
+    \@namedef{zaikyo/3/\arabic{zaikyo}}{#3}
+    \@namedef{zaikyo/4/\arabic{zaikyo}}{#4}
+    \@namedef{zaikyo/5/\arabic{zaikyo}}{#5}
+    \stepcounter{zaikyo}
+}
+\docgroupname{TECKTECK}
+\doctype{山行企画カード 2020}
+\docversion{第 0 版}
+\yoteibi{}
+\yobibi{}
+
+\newcounter{keyword}
+\setcounter{keyword}{1}
+\newcounter{kiseki}
+\setcounter{kiseki}{1}
+\newcounter{zaikyo}
+\setcounter{zaikyo}{1}
+
+\newenvironment{kisekilist}{
+    \par
+    \centering
+    \begin{tabular}{llllllp{6.5em}p{6em}}
+}{
+    \end{tabular}
+    \par
+}
+
+\newcommand*{\kisekitableline}[2]{%
+    \quad\kintou{6}{\@nameuse{#1/1/#2}}
+    &(&
+    \kintou{6}{\@nameuse{#1/2/#2}} &
+    \@nameuse{#1/3/#2}\quad 期
+    &)&
+    TEL: &
+    \@nameuse{#1/4/#2} &
+    \@nameuse{#1/5/#2}\quad \\
+    \hline
+}
+
+\renewcommand{\maketitle}{%
+    \medskip\noindent%
+    \makebox[0pt][l]{\color{primaryTextColor}\@docgroupname}%
+    \makebox[\textwidth][c]{\@doctype}%
+    \makebox[0pt][r]{\@docversion}
+
+    \begin{tcolorbox}[colback=white,colframe=primaryColor]
+        \centering\Huge{\@title}
+    \end{tcolorbox}
+
+    \noindent
+    \makebox[\textwidth][l]{%
+        \ifthenelse{\equal{\@yoteibi}{}}{}{%
+            期日：\quad \@yoteibi \qquad%
+        }%
+        \ifthenelse{\equal{\@yobibi}{}}{}{%
+        予備日：\quad \@yobibi%
+        }%
+    }%
+    \makebox[0pt][r]{%
+        \addtocounter{keyword}{-1}
+        \foreach \i in {1,...,\arabic{keyword}} {
+            \fbox{\@nameuse{keyword/\i}}%
+        }%
+    }
+
+    \ifthenelse{\value{kiseki}=1}{}{%
+    \noindent 企責：
+    \begin{kisekilist}
+        \directlua{printkisekitable("kiseki", \arabic{kiseki}-1)}
+    \end{kisekilist}
+    }
+
+    \ifthenelse{\value{zaikyo}=1}{}{%
+    \vspace{1.5ex}
+    \noindent 在京：
+    \begin{kisekilist}
+        \directlua{printkisekitable("zaikyo", \arabic{zaikyo}-1)}
+    \end{kisekilist}
+    }
+}
+
+\begin{luacode*}
+function printkisekitable(key, n)
+    for i=1,n do
+    tex.sprint(string.format("\\kisekitableline{%s}{%d}", key, i))
+    end
+end
+\end{luacode*}
+
+%  _   _                _ _ _
+% | | | | ___  __ _  __| | (_)_ __   ___  ___
+% | |_| |/ _ \/ _` |/ _` | | | '_ \ / _ \/ __|
+% |  _  |  __/ (_| | (_| | | | | | |  __/\__ \
+% |_| |_|\___|\__,_|\__,_|_|_|_| |_|\___||___/
+%
+
+% section
+\renewcommand*{\section}[2][]{%
+    \par
+    \addpenalty\@secpenalty
+    \refstepcounter{section}
+    \ifthenelse{\equal{#1}{}}{
+        \addcontentsline{toc}{section}{#2}
+    }{
+        \addcontentsline{toc}{section}{#1}
+    }
+    \vspace{\baselineskip}%
+    \begin{tcolorbox}[%
+        blanker,
+        borderline west={5pt}{0pt}{primaryColor},
+        borderline south={1pt}{0pt}{primaryColor},
+        left=10pt,
+        boxsep=5pt,
+        after={
+            % ページの最後に来ることを回避
+            \tcb@parfillskip@check
+            \par\nointerlineskip
+            \nobreak
+            \vspace{1\zh}
+        },
+    ]
+        \headfont\color{primaryTextColor}\large#2
+    \end{tcolorbox}
+}
+
+% susbsection
+\titleformat{\subsection}{\headfont\color{primaryTextColor}}{◆◆}{8pt}{}
+\titlespacing{\subsection}{0pt}{\baselineskip}{0pt}
+
+%% subsubsection
+\titleformat{\subsubsection}{\color{primaryTextColor}\headfont}{}{0pt}{}
+
+%     _    _         _                  _
+%    / \  | |__  ___| |_ _ __ __ _  ___| |_
+%   / _ \ | '_ \/ __| __| '__/ _` |/ __| __|
+%  / ___ \| |_) \__ \ |_| | | (_| | (__| |_
+% /_/   \_\_.__/|___/\__|_|  \__,_|\___|\__|
+%
+
+% Original: https://github.com/Yasunari/ascolorbox/blob/master/ascolorbox.sty
+% LICENSE: https://github.com/Yasunari/ascolorbox/blob/master/LICENSE
+\DeclareTColorBox{ascolorbox4}{ o m O{3} O{}}%
+{enhanced, colback=white, colframe=white,
+attach boxed title to top left={xshift=1cm,yshift=-\tcboxedtitleheight/2}, fonttitle=\bfseries,varwidth boxed title=0.85\linewidth, coltitle=black, fonttitle=\gtfamily,
+enlarge top by=2mm, enlarge bottom by=2mm, breakable, sharp corners,
+boxed title style={colback=white,left=0mm,right=0mm},
+borderline={.75pt}{#3pt}{black,dotted},
+underlay unbroken={\draw[black,line width=.5pt]
+       (title.east|-frame.north east)--([xshift=-#3*4pt]frame.north east)
+       arc [start angle=180, end angle=270, radius=#3*4pt]
+       -- ([yshift=#3*4pt]frame.south east)
+       arc [start angle=90, end angle=180, radius=#3*4pt]
+       -- ([xshift=#3*4pt]frame.south west)
+       arc [start angle=0, end angle=90, radius=#3*4pt]
+       -- ([yshift=-#3*4pt]frame.north west)
+       arc [start angle=270, end angle=360, radius=#3*4pt]
+       -- (frame.north west-|title.west) ;
+       \filldraw[fill=gray,draw=gray]
+       (frame.north east) -- +(0pt,-#3*2pt) -- +(-#3*2pt,-#3*2pt) -- +(-#3*2pt,0pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.south east) -- +(-#3*2pt,0pt) -- +(-#3*2pt,#3*2pt) -- +(0pt,#3*2pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.south west) -- +(0pt,#3*2pt) -- +(#3*2pt,#3*2pt) -- +(#3*2pt,0pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.north west) -- +(0pt,-#3*2pt) -- +(#3*2pt,-#3*2pt) -- +(#3*2pt,0pt) -- cycle;
+       },
+underlay first={\draw[black,line width=.5pt]
+       (title.east|-frame.north east)--([xshift=-#3*4pt]frame.north east)
+       arc [start angle=180, end angle=270, radius=#3*4pt]
+       -- (frame.south east) ;
+       \draw[black,line width=.5pt]
+       (frame.south west)
+       -- ([yshift=-#3*4pt]frame.north west)
+       arc [start angle=270, end angle=360, radius=#3*4pt]
+       -- (frame.north west-|title.west) ;
+       \filldraw[fill=gray,draw=gray]
+       (frame.north east) -- +(0pt,-#3*2pt) -- +(-#3*2pt,-#3*2pt) -- +(-#3*2pt,0pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.north west) -- +(0pt,-#3*2pt) -- +(#3*2pt,-#3*2pt) -- +(#3*2pt,0pt) -- cycle;
+       },
+underlay middle={\draw[black,line width=.5pt]
+       (frame.north east)--(frame.south east) ;
+       \draw[black,line width=.5pt]
+       (frame.south west)--(frame.north west) ;
+       },
+underlay last={\draw[black,line width=.5pt]
+       (frame.north east) -- ([yshift=#3*4pt]frame.south east)
+       arc [start angle=90, end angle=180, radius=#3*4pt]
+       -- ([xshift=#3*4pt]frame.south west)
+       arc [start angle=0, end angle=90, radius=#3*4pt]
+       -- (frame.north west);
+              \filldraw[fill=gray,draw=gray]
+       (frame.south east) -- +(-#3*2pt,0pt) -- +(-#3*2pt,#3*2pt) -- +(0pt,#3*2pt) -- cycle;
+       \filldraw[fill=gray,draw=gray]
+       (frame.south west) -- +(0pt,#3*2pt) -- +(#3*2pt,#3*2pt) -- +(#3*2pt,0pt) -- cycle;
+       },
+IfValueTF={#1}{title=【#2】〈#1〉}{title=【#2】},#4}
+
+\renewenvironment{abstract}{
+    \centering
+    \begin{ascolorbox4}{\small 概要・山の見どころ}[2][width=\textwidth-6\zw]
+    \small
+}{
+    \end{ascolorbox4}
+}
+
+%  _____                          _
+% |  ___|__  _ __ _ __ ___   __ _| |_ ___
+% | |_ / _ \| '__| '_ ` _ \ / _` | __/ __|
+% |  _| (_) | |  | | | | | | (_| | |_\__ \
+% |_|  \___/|_|  |_| |_| |_|\__,_|\__|___/
+%
+
+% emph: emphsize text
+% \emph make text bold.
+% \emph* make text bold and highlighted.
+\renewcommand*{\emph}{\@ifstar\@emphs\@emph}
+\newcommand*{\@emphs}[1]{\highLight[highlightColor]{\textbf{#1}}}
+\newcommand*{\@emph}[1]{\textbf{#1}}
+
+% Checkbox environment
+\newenvironment{checkbox}{%
+    \begin{itemize}
+    \renewcommand*{\labelitemi}{□}
+    \renewcommand*{\labelitemii}{◯}
+    \renewcommand*{\labelitemiii}{△}
+}{%
+    \end{itemize}
+}
+
+% information box environment
+\newenvironment{info}{%
+\begin{tcolorbox}[
+    empty,
+    boxsep=5pt,
+    left=15pt,
+    bottom=5pt,
+    enlarge top by=4mm,
+    enlarge bottom by=2mm,
+    underlay={
+        \draw (frame.north west) [xshift=2mm,yshift=-2mm] circle (2mm)
+            [fill=infoColor,draw=none];
+        \node [anchor=center,xshift=2mm,yshift=-2mm]
+            at (frame.north west) {\color{white}\textbf i};
+        \draw[-,line width=2pt,draw=infoColor]
+            (frame.north west){}+(2mm,-5mm) -- ($(frame.south west)+(2mm,0mm)$);
+    },
+]
+}{%
+\end{tcolorbox}
+}
+
+\newenvironment{warn}{%
+\begin{tcolorbox}[
+    empty,
+    boxsep=5pt,
+    left=15pt,
+    bottom=5pt,
+    enlarge top by=4mm,
+    enlarge bottom by=2mm,
+    underlay={
+        \path[fill=warnColor]
+            ($(frame.north west)+(2mm, 0)$)
+            -- ++(-60:4.5mm) -- ++(-180:4.5mm);
+        \node [anchor=center,xshift=2mm,yshift=-2.2mm]
+            at (frame.north west) {\color{white}\textbf !};
+        \draw[-,line width=2pt,draw=warnColor]
+            (frame.north west){}+(2mm,-5mm) -- ($(frame.south west)+(2mm,0mm)$);
+    },
+]
+    \textbf{注意}\quad
+}{%
+\end{tcolorbox}
+}
+
+%     _        _   _               ____  _
+%    / \   ___| |_(_) ___  _ __   |  _ \| | __ _ _ __
+%   / _ \ / __| __| |/ _ \| '_ \  | |_) | |/ _` | '_ \
+%  / ___ \ (__| |_| | (_) | | | | |  __/| | (_| | | | |
+% /_/   \_\___|\__|_|\___/|_| |_| |_|   |_|\__,_|_| |_|
+%
+
+\newlength{\actionplantemp}
+\newlength{\actionplanWidth}
+\setlength{\actionplanWidth}{\textwidth-10mm}
+\newlength{\actionplanLineHeight}
+\setlength{\actionplanLineHeight}{1.8cm}
+\newlength{\actionplanPathRemainWidth}
+\setlength{\actionplanPathRemainWidth}{5mm}
+\newlength{\actionplanPathMargin}
+\setlength{\actionplanPathMargin}{5mm plus 100mm minus 2mm}
+
+% 場所を宣言 {名前}[上の注釈]{到着時刻}{出発時刻}
+\NewDocumentCommand\spot{m O{} m m}{%
+    \directlua{actionplan_add_spot(\luastringN{#1}, \luastringN{\footnotesize#2}, \luastringN{\scriptsize#3}, \luastringN{\scriptsize#4})}
+}
+
+% 移動 {上の注釈}{下の注釈}{tikz のオプション}
+\NewDocumentCommand\actionpath{m m m}{%
+    \directlua{actionplan_add_path(\luastringN{#1}, \luastringN{#2}, \luastringN{#3})}
+}
+
+% 徒歩での移動 {上の注釈}[下の注釈]
+\NewDocumentCommand\walk{mO{}}{%
+    \actionpath{\footnotesize#1}{\footnotesize#2}{-}
+}
+
+% 乗り物での移動 {上の注釈}[下の注釈]
+\NewDocumentCommand\ride{mO{}}{%
+    \actionpath{#1}{\footnotesize#2}{double}
+}
+
+\newenvironment{actionplan}{%
+    \directlua{actionplan_init()}
+}{%
+    \actionplanPrint
+}
+
+\newif\ifcontinue
+\newcommand*{\actionplanPrint}{%
+    \continuetrue
+    \directlua{myco = coroutine.create(actionplan_print_impl)}
+    \loop
+    \directlua{local ok = coroutine.resume(myco) if ok then else tex.sprint(\luastringN{\continuefalse}) end}
+    \ifcontinue\repeat
+}
+
+\begin{luacode*}
+function actionplan_init()
+    actionplan = {
+        spot = {},
+        path = {},
+    }
+end
+
+function actionplan_add_spot(name, mark, s, t)
+    actionplan.spot[#actionplan.spot+1] = {name=name, mark=mark, s=s, t=t, idx=#actionplan.spot+1}
+end
+
+function actionplan_add_path(top, bottom, options)
+    actionplan.path[#actionplan.path+1] = {top=top, bottom=bottom, options=options, idx=#actionplan.path+1}
+end
+
+local function get_width(txt)
+    tex.sprint("\\settowidth{\\actionplantemp}{"..txt.."}")
+    coroutine.yield()
+    return tex.skip['actionplantemp'].width
+end
+
+function actionplan_print_impl()
+    if #actionplan.path < 0 or #actionplan.spot ~= #actionplan.path + 1 then
+        tex.sprint("\\errmessage{spot と path の数が不正です。}")
+        return
+    end
+    local figwidth = tex.skip['actionplanWidth'].width
+    local lineheight = tex.skip['actionplanLineHeight'].width
+    local pathRemainWidth = tex.skip['actionplanPathRemainWidth'].width
+    local pathNaturalMargin = tex.skip['actionplanPathMargin'].width
+    local pathMaxMargin = pathNaturalMargin + tex.skip['actionplanPathMargin'].stretch
+    local pathMinMargin = pathNaturalMargin - tex.skip['actionplanPathMargin'].shrink
+    local currentLine = 0
+    local pathCnt = 0
+    local line = {}
+    local remainWidth = figwidth
+    local function make_spot(spot, x, y)
+        local name = "spot"..spot.idx
+        local min_width = math.max(spot.time_width, spot.mark_width)
+        local box = "\\node [draw,anchor=west,minimum width="..min_width.."sp] ("..name..") at ("..x.."sp, "..y.."sp) {"..spot.name.."};"
+        local mark = "\\node [above=3pt of "..name..".north,anchor=south,inner sep=0pt] {"..spot.mark.."};"
+        local time = "\\node [below=3pt of "..name..".south west,anchor=north west,inner sep=0pt] {"..spot.s.."};"
+        time = time.."\\node [below=3pt of "..name..".south east,anchor=north east,inner sep=0pt] {"..spot.t.."};"
+        return box..mark..time
+    end
+    local function make_path(path, left, right)
+        local x = "\\draw ["..path.options.."] ("..left..") to" -- TODO
+        x = x.."node[above]{"..path.top.."} node[below]{"..path.bottom.."} ("..right..");"
+        return x
+    end
+    local function writeLine(is_last)
+        if #line == 0 then return end
+        local S = "start"..currentLine -- 行の一番左の座標の名前
+        local E = "end"..currentLine   -- 行の一番右の座標の名前
+        local y = -currentLine * lineheight -- 基準 y 座標
+        local x = 0 -- x 座標 (unit: sp)
+        local draw = ""
+
+        -- \coordinate
+        tex.sprint("\\coordinate ("..S..") at (0, "..y.."sp);")
+        tex.sprint("\\coordinate ("..E..") at ("..figwidth.."sp, "..y.."sp);")
+
+        for i=1,#line do
+            if line[i].type == "spot" then
+                tex.sprint(make_spot(line[i].val, x, y))
+                x = x + line[i].val.width
+            end
+            if line[i].type == "path" then
+                local path = line[i].val
+                local left = 'spot'..(path.idx)
+                local right = 'spot'..(path.idx + 1)
+                if i == 1 then left = S end
+                if i == #line then right = E end
+                draw = draw..make_path(path, left, right)
+                x = x + path.width
+                -- １行の幅にピッタリ収まるように調整
+                if is_last then
+                    x = x + math.min(remainWidth / pathCnt, 2 * (pathNaturalMargin - pathMinMargin))
+                else
+                    x = x + math.min(remainWidth / pathCnt, 2 * (pathMaxMargin - pathMinMargin))
+                end
+            end
+            if line[i].type == "remain-path" then
+                local path = {options=line[i].path.options, top='', bottom=''}
+                if i == 1 then
+                    draw = draw..make_path(path, S, 'spot'..(line[i].path.idx + 1))
+                    x = x + pathRemainWidth
+                else
+                    draw = draw..make_path(path, 'spot'..(line[i].path.idx), E)
+                end
+            end
+        end
+
+        tex.sprint(draw)
+
+        line = {}
+        remainWidth = figwidth
+        pathCnt = 0
+        currentLine = currentLine + 1
+    end
+    local function pushSpot(spot, next_path, prev_path)
+        if next_path ~= nil and remainWidth - pathRemainWidth < spot.width then
+            writeLine()
+            line[#line + 1] = {type="remain-path", path=prev_path}
+            remainWidth = remainWidth - pathRemainWidth
+        elseif next_path == nil and remainWidth < spot.width then
+            writeLine()
+            line[#line + 1] = {type="remain-path", path=prev_path}
+            remainWidth = remainWidth - pathRemainWidth
+        end
+        remainWidth = remainWidth - spot.width
+        line[#line + 1] = {type="spot",val=spot}
+    end
+    local function pushPath(path)
+        if remainWidth < path.width then
+            line[#line + 1] = {type="remain-path", path=path}
+            remainWidth = remainWidth - pathRemainWidth
+            writeLine()
+        end
+        remainWidth = remainWidth - path.width
+        line[#line + 1] = {type="path", val=path}
+        pathCnt = pathCnt + 1
+    end
+
+    -- spot の幅を求める
+    for i=1,#actionplan.spot do
+        actionplan.spot[i].mark_width = get_width(actionplan.spot[i].mark)
+        actionplan.spot[i].time_width = get_width(actionplan.spot[i].s) + tex.sp('1mm') + get_width(actionplan.spot[i].t)
+        actionplan.spot[i].width = get_width('\\tikz{'..make_spot(actionplan.spot[i], 0, 0)..'}')
+    end
+
+    -- path の幅を求める
+    for i=1,#actionplan.path do
+        actionplan.path[i].width = math.max(
+            get_width(actionplan.path[i].top),
+            get_width(actionplan.path[i].bottom)
+        ) + 2 * pathMinMargin
+    end
+
+    tex.sprint("\\begin{tikzpicture}")
+    for i = 1,#actionplan.path do
+        pushSpot(actionplan.spot[i], actionplan.path[i], actionplan.path[i - 1])
+        pushPath(actionplan.path[i])
+    end
+    pushSpot(actionplan.spot[#actionplan.spot], nil, actionplan.path[#actionplan.spot - 1])
+    writeLine(true)
+    tex.sprint("\\end{tikzpicture}")
+end
+\end{luacode*}
+
+% Font Awesome
+% Solid Style (fas) のアイコンは \fas{unicode}
+% Brand Style (fab) のアイコンは \fab{unicode} で表示できる。
+% https://fontawesome.com/ でアイコンを検索できる。
+% 例　Twitter のアイコンは \fab{f099} https://fontawesome.com/icons/twitter?style=brands
+\newfontfamily\FAB{Font Awesome 5 Brands-Regular-400.otf}
+\newfontfamily\FAS{Font Awesome 5 Free-Solid-900.otf}
+\newcommand*{\fab}[1]{{\FAB\color{gray}\symbol{\directlua{tex.sprint(0x#1)}}} }
+\newcommand*{\fas}[1]{{\FAS\color{gray}\symbol{\directlua{tex.sprint(0x#1)}}} }
+
+\newcommand*{\bed}{\fas{f236}}
+\newcommand*{\camera}{\fas{f030}}
+\newcommand*{\food}{\fas{f2e7}}
+\newcommand*{\shop}{\fas{f291}}
+\newcommand*{\twitter}{\fbs{f099}}
+\newcommand*{\wc}{\fas{f7bd}}
+
+\makeatother
