@@ -1,0 +1,154 @@
+\documentclass[a4paper]{ltjsarticle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% LaTeX と TikZ で作るおしゃれな見出し
+% おしゃれな見出しを見つけるたびに追加予定
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{bxjalipsum}
+\usepackage{color}
+\usepackage{comment}
+\usepackage{docmute}
+\usepackage{fancyhdr} % ヘッダー
+\usepackage[bottom=25mm]{geometry} % 余白等の設定
+\usepackage{here}     % 図表をその場に表示
+\usepackage[unicode]{hyperref} % PDF のメタデータ生成
+\usepackage{listings} % コード
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,hooks,skins,xparse}
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,shapes}
+\usepackage{titlesec} % Section などの設定
+\usepackage{xparse}
+
+\lstset{
+    basicstyle={\ttfamily},
+    identifierstyle={},
+    commentstyle={\color[rgb]{0,0.5,0}},
+    keywordstyle={\bfseries \color[rgb]{0,0,1}},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily \color[rgb]{1, 0.4, 0}},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0\zw,
+    xleftmargin=3\zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1\zw,
+    lineskip=-0.5ex
+}
+
+\begin{document}
+
+\section*{はじめに}
+
+\LaTeX と TikZ と tcolorbox で作ったおしゃれな見出しを紹介する。
+
+TikZ や tcolorbox で見出しを作る場合、
+section コマンド等を再定義することになる。
+section コマンドはアスタリスクの有無で
+見出しを目次に追加するかどうかを指定でき、
+オプション引数で目次での見出しの内容、
+通常の引数で目次の内容を指定できる。
+よって section コマンドを再定義する場合、
+上記のように引数を処理し目次に追加した後、
+対応する章番号を1増やす処理が必要である。
+そのような処理の例を次に示した。
+
+\begin{lstlisting}[language=tex]
+% \usepackage{xparse}
+\RenewDocumentCommand\section{s o m}{
+    \par
+    \refstepcounter{section} % カウンタをインクリメント
+    % スター付きでないなら目次に追加
+    \IfBooleanF{#1}{
+        \IfNovalueTF{#2}{
+            \addcontentsline{toc}{section}{#3}
+        }{
+            \addcontentsline{toc}{section}{#2}
+        }
+    }
+    % ここにセクション本体を書く
+}
+\end{lstlisting}
+
+また、見出しは基本的にページの一番最後に来ないことが望ましい。
+tcolorbox で作った box がページの最後に来ないようにするには
+次のようにオプションを追加する。
+
+\begin{lstlisting}[language=tex]
+\begin{tcolorbox}[
+    after={
+        % ページの最後に来ることを回避
+        \tcb@parfillskip@check
+        \par\nointerlineskip
+        \nobreak
+        \vspace{1\zh} % ボックス後ろの余白
+    },
+]
+% ここにボックスの中身を記述
+\end{tcolorbox}
+\end{lstlisting}
+
+次のページから見出しの例を追加する。
+例ではsectionコマンドを再定義するのではなく、
+章番号や見出しの内容をハードコーディングした。
+ソースコードは tex ファイルを参照。
+
+\clearpage
+
+% chapter
+\noindent
+\begin{tikzpicture}
+    \node (n) [draw=black!60,line width=3pt,rounded corners=26pt,inner xsep=15pt,inner ysep=10pt]
+        [anchor=north west] at (0, 0)
+        [scale=1.3]
+        {\headfont\Large 第 \raisebox{-5pt}{\HUGE 7} \Large 章};
+    \node [fill=black!60,minimum width=\textwidth,minimum height=10pt,outer sep=0pt,rounded corners=5pt]
+        [anchor=west] at (0, -70pt) {};
+    \node [anchor=west,right=20pt of n.east] {\headfont\LARGE 吾輩は猫である};
+\end{tikzpicture}
+
+\vspace{\baselineskip}
+%chapter end
+
+\jalipsum[3]{wagahai}
+
+% section
+\vspace{\baselineskip}
+\par\noindent
+\tikz[baseline=(x.base)]{
+    \node (x) [fill=black!70,rounded corners=8pt,inner xsep=6pt]
+    {\textcolor{white}{\headfont\large 7.1}};
+}
+\hspace{1\zw}{\headfont\large セクション}
+\vspace{.6\baselineskip}
+\par
+% end section
+
+\jalipsum[3]{wagahai}
+
+% subsection
+\vspace{\baselineskip}
+\par\noindent
+{\headfont 7.1.1 \hspace{1em} サブセクション}
+\par
+% end subsection
+
+\jalipsum[3]{wagahai}
+
+\vspace{\baselineskip}
+\hrule
+
+\begin{itemize}
+    \item デザイン参考：『はじめてのパターン認識』
+    \item 実際は別のフォントを使用
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
